@@ -23,7 +23,7 @@ import { Address, Hash, parseAbi } from "viem";
 import { FaArrowDown, FaArrowUp, FaX } from "react-icons/fa6";
 import { themeVariables } from "@/styles/themeVariables";
 import { toast, ToastContainer } from "react-toastify";
-import { mainnet, sepolia } from "viem/chains";
+import { mainnet, sepolia, base, optimism } from "viem/chains";
 import { useAppConfig } from "./AppConfigContext";
 
 enum RegistrationStep {
@@ -131,18 +131,21 @@ export const MintForm = () => {
     if (chainId !== listingChainId) {
       await switchChainAsync({ chainId: listingChainId });
     }
-    const addresses: { coin: number; value: string }[] = [
+    const addresses: { coin: number; value: string; chain: number }[] = [
       {
         value: address,
         coin: ETH_COIN,
+        chain: mainnet.id
       },
       {
         value: address,
-        coin: BASE_COIN
+        coin: BASE_COIN,
+        chain: base.id
       },
       {
         value: address,
-        coin: OP_COIN
+        coin: OP_COIN,
+        chain: optimism.id
       }
     ];
 
