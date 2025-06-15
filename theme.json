@@ -1,0 +1,9 @@
+{
+    "main": "#f9f9f9",
+    "accent": "#333333",
+    "light": "#ffffff",
+    "dark": "#000000",
+    "error": "#ff0000",
+    "backgroundImage": "",
+    "nounColor": "#d63c5e"
+}
