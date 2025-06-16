@@ -12,7 +12,7 @@ export const Footer = () => {
       width="100%"
       p={3}
       bg={themeVariables.light}
-      boxShadow="0 -2px 4px rgba(0,0,0,0.1)"
+      border={"1px solid #eee"}
       mt="auto"
     >
       <Box ml={4}>
