@@ -374,7 +374,7 @@ export const MintForm = () => {
                   bg="#888"
                   _hover={{ bg: "#666" }}
                   borderRadius="5px"
-                  className="londrina-solid"
+                  className="londrina-solid mint-btn"
                 >
                   Mint
                 </Button>

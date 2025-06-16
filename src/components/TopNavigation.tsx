@@ -43,8 +43,9 @@ export const TopNavigation = ({ setView }: TopNavigationProps) => {
       <Grid
         templateColumns={{ base: "1fr auto", md: "auto 1fr" }}
         alignItems="center"
-        maxWidth="1250px"
+        maxWidth="1200px"
         margin="0 auto"
+        px={4}
       >
         <Grid templateColumns="auto auto" alignItems="center">
           <Link textDecoration="none" onClick={() => setView("mint")}>

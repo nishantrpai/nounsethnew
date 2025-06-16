@@ -47,27 +47,24 @@ const AppContainer = () => {
       <Box>
         <TopNavigation setView={setView} />
       </Box>
-      <Box className="ticker-container" width="100%" p="15px" bg="#fff" borderBottom="1px solid #e0e0e0" display="flex">
-        <Box flex="1" className="counter-section" display="flex" alignItems="center" justifyContent="center">
-          <span className="counter-text">12,384 ⌐◨-◨ names minted and counting...</span>
-        </Box>
-        <Box className="banner-divider"></Box>
-        <Box flex="2" className="address-ticker" overflow="hidden" position="relative">
-          <Box className="ticker-content" position="absolute" whiteSpace="nowrap" animation="ticker 30s linear infinite">
-            <span className="ticker-item">harsh.⌐◨-◨.eth</span>
-            <span className="ticker-item">123.⌐◨-◨.eth</span>
-            <span className="ticker-item">🔥🔥🔥.⌐◨-◨.eth</span>
-            <span className="ticker-item">volky.⌐◨-◨.eth</span>
-            <span className="ticker-item">4156.⌐◨-◨.eth</span>
-            <span className="ticker-item">echo.⌐◨-◨.eth</span>
+      <Box className="ticker-container" width="100%" py="15px" bg="#fff" borderBottom="1px solid #e0e0e0">
+        <Box maxWidth="1200px" margin="0 auto" px={4} display="flex" width="100%">
+          <Box flex="1" className="counter-section" display="flex" alignItems="center" justifyContent="center">
+            <span className="counter-text">12,384 ⌐◨-◨ names minted and counting...</span>
           </Box>
-          <Box className="ticker-content ticker-clone" position="absolute" whiteSpace="nowrap" animation="ticker2 30s linear infinite">
-            <span className="ticker-item">harsh.⌐◨-◨.eth</span>
-            <span className="ticker-item">123.⌐◨-◨.eth</span>
-            <span className="ticker-item">🔥🔥🔥.⌐◨-◨.eth</span>
-            <span className="ticker-item">volky.⌐◨-◨.eth</span>
-            <span className="ticker-item">4156.⌐◨-◨.eth</span>
-            <span className="ticker-item">echo.⌐◨-◨.eth</span>
+          <Box className="banner-divider"></Box>
+          <Box flex="2" className="address-ticker" overflow="hidden" position="relative">
+            <Box className="ticker-content" position="absolute" whiteSpace="nowrap" animation="ticker 20s linear infinite">
+              <span className="ticker-item">harsh.⌐◨-◨.eth</span>
+              <span className="ticker-item">123.⌐◨-◨.eth</span>
+              <span className="ticker-item">🔥🔥🔥.⌐◨-◨.eth</span>
+              <span className="ticker-item">volky.⌐◨-◨.eth</span>
+              <span className="ticker-item">4156.⌐◨-◨.eth</span>
+              <span className="ticker-item">echo.⌐◨-◨.eth</span>
+              <span className="ticker-item">harsh.⌐◨-◨.eth</span>
+              <span className="ticker-item">123.⌐◨-◨.eth</span>
+              <span className="ticker-item">🔥🔥🔥.⌐◨-◨.eth</span>
+            </Box>
           </Box>
         </Box>
       </Box>

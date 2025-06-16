@@ -11,21 +11,20 @@
 
 .counter-section {
   font-family: 'Courier Prime', monospace;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .address-ticker {
   height: 25px;
   font-family: 'Courier Prime', monospace;
+  width: 100%;
+  overflow: hidden;
 }
 
 .ticker-content {
-  left: 0;
-  top: 0;
-  width: fit-content;
-  height: 100%;
-  line-height: 25px;
+  display: inline-block;
   white-space: nowrap;
+  will-change: transform;
 }
 
 .ticker-clone {
@@ -34,21 +33,13 @@
 
 .ticker-item {
   display: inline-block;
-  margin-right: 30px;
+  margin-right: 40px;
+  position: relative;
 }
 
 @keyframes ticker {
   0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes ticker2 {
-  0% {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
   100% {
     transform: translateX(-100%);
@@ -59,9 +50,13 @@
 .input-container {
   position: relative;
   border-radius: 5px;
-  border: 2px solid #ccc;
   background: white;
   overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.mint-btn {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 // Nouns glasses styling
