@@ -7,6 +7,7 @@ import {
   Link,
   Spinner,
   Text,
+  Image,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useNamepsaceClient } from "./useNamespaceClient";
@@ -32,14 +33,14 @@ enum RegistrationStep {
   PRIMARY_NAME = 2,
   COMPLETE = 3,
 }
- 
+
 const ETH_COIN = 60;
 const BASE_COIN = 2147492101;
-const OP_COIN = 2147483658
+const OP_COIN = 2147483658;
 
 export const MintForm = () => {
-
-  const { isRenting, listedName, listingChainId, isTestnet, defaultAvatarUri } = useAppConfig()
+  const { isRenting, listedName, listingChainId, isTestnet, defaultAvatarUri } =
+    useAppConfig();
 
   const [label, setLabel] = useState("");
   const { address, chainId } = useAccount();
@@ -121,7 +122,6 @@ export const MintForm = () => {
     []
   );
 
-
   const handleMint = async () => {
     if (!address) {
       openConnectModal?.();
@@ -135,26 +135,25 @@ export const MintForm = () => {
       {
         value: address,
         coin: ETH_COIN,
-        chain: mainnet.id
+        chain: mainnet.id,
       },
       {
         value: address,
         coin: BASE_COIN,
-        chain: base.id
+        chain: base.id,
       },
       {
         value: address,
         coin: OP_COIN,
-        chain: optimism.id
-      }
+        chain: optimism.id,
+      },
     ];
 
-    const texts: { key: string, value: string }[] = []
+    const texts: { key: string; value: string }[] = [];
 
     if (defaultAvatarUri) {
-      texts.push({ key: "avatar", value: defaultAvatarUri })
+      texts.push({ key: "avatar", value: defaultAvatarUri });
     }
-
 
     try {
       setMintIndicator({ btnLabel: "Waiting for wallet", waiting: true });
@@ -287,12 +286,12 @@ export const MintForm = () => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        mb={10}
+        mb={0}
         alignSelf="center"
       >
         <Text
           mt={0}
-          mb={2}
+          mb={0}
           color={themeVariables.dark}
           fontSize="48px"
           textAlign="center"
@@ -303,13 +302,16 @@ export const MintForm = () => {
         </Text>
         <Text
           mt={0}
-          mb={10}
+          mb={0}
           color={themeVariables.dark}
           fontSize={subHeadlineFontSize}
           textAlign="center"
           className="nouns-logo-monospace"
         >
-          Strap on the <strong>⌐◨-◨</strong>, and enter the Nouniverse
+          <div style={{ display: "inline-flex", alignItems: "center" }}>
+            Strap on the <Image src={"/favicon.svg"} height={20} style={{marginTop: 5, marginRight: 0}} /> , and enter
+            the Nouniverse
+          </div>
         </Text>
       </Box>
       <Box
@@ -323,7 +325,12 @@ export const MintForm = () => {
         <Box paddingTop={6}>
           {registrationStep === RegistrationStep.START && (
             <>
-              <Box display="flex" flexDirection="row" alignItems="center" mb={4}>
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                mb={4}
+              >
                 <Box className="input-container" position="relative" flex="1">
                   <Input
                     value={label}
@@ -337,15 +344,17 @@ export const MintForm = () => {
                     flex="1"
                     pr="7rem"
                   />
-                  <Text 
-                    position="absolute" 
-                    right="10px" 
-                    top="50%" 
-                    transform="translateY(-50%)" 
-                    fontSize="1em" 
+                  <Text
+                    position="absolute"
+                    right="10px"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    fontSize="1em"
                     color="black"
                     pointerEvents="none"
-                  >.⌐◨-◨.eth</Text>
+                  >
+                    .⌐◨-◨.eth
+                  </Text>
                   {indicators.checking && (
                     <Box
                       position="absolute"
@@ -370,7 +379,7 @@ export const MintForm = () => {
                   Mint
                 </Button>
               </Box>
-              
+
               {isRenting && (
                 <Box display="flex" alignItems="center" mb={3} mt={3}>
                   <Text
@@ -404,15 +413,26 @@ export const MintForm = () => {
                   />
                 </Box>
               )}
-              
-              <Box mt={2} p={3} bg="#ffeb3b" borderRadius="5px" fontSize="0.9em" textAlign="left" display="flex" alignItems="flex-start" flexDirection="column" width="fit-content" ml="auto">
+
+              <Box
+                mt={2}
+                p={3}
+                bg="#F2A730"
+                borderRadius="5px"
+                fontSize="0.9em"
+                textAlign="left"
+                display="flex"
+                alignItems="flex-start"
+                flexDirection="column"
+                width="fit-content"
+                ml="auto"
+              >
                 <Text mb={0}>
                   Disabled button if: <br />
-                  • no input in field <br />
-                  • wallet not connected
+                  • no input in field <br />• wallet not connected
                 </Text>
               </Box>
-              
+
               {subnameTakenErr && (
                 <Text
                   textAlign="center"

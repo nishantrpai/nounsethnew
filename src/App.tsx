@@ -47,7 +47,7 @@ const AppContainer = () => {
       <Box>
         <TopNavigation setView={setView} />
       </Box>
-      <Box className="ticker-container" width="100%" p="15px" bg="#f1f1f1" borderBottom="1px solid #e0e0e0" display="flex">
+      <Box className="ticker-container" width="100%" p="15px" bg="#fff" borderBottom="1px solid #e0e0e0" display="flex">
         <Box flex="1" className="counter-section" display="flex" alignItems="center" justifyContent="center">
           <span className="counter-text">12,384 ⌐◨-◨ names minted and counting...</span>
         </Box>
