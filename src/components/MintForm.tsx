@@ -306,7 +306,7 @@ export const MintForm = () => {
           color={themeVariables.dark}
           fontSize={subHeadlineFontSize}
           textAlign="center"
-          className="nouns-logo-monospace"
+          className="courier-prime"
         >
           <div style={{ display: "inline-flex", alignItems: "center" }}>
             Strap on the <Image src={"/favicon.svg"} height={20} style={{marginTop: 5, marginRight: 0}} /> , and enter

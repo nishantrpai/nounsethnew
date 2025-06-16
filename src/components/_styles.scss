@@ -10,13 +10,13 @@
 }
 
 .counter-section {
-  font-family: monospace;
+  font-family: 'Courier Prime', monospace;
   font-size: 16px;
 }
 
 .address-ticker {
   height: 25px;
-  font-family: monospace;
+  font-family: 'Courier Prime', monospace;
 }
 
 .ticker-content {
@@ -94,7 +94,7 @@
 }
 
 .nouns-logo-monospace {
-  font-family: monospace;
+  font-family: 'Courier Prime', monospace;
   letter-spacing: -1px;
   font-weight: bold;
 }
@@ -105,4 +105,14 @@
   width: 1px;
   background-color: #ccc;
   margin: 0 16px;
+}
+
+// Any elements with this class will use Courier Prime
+.courier-font {
+  font-family: 'Courier Prime', monospace !important;
+}
+
+// Courier Prime font for monospace text
+.courier-prime {
+  font-family: 'Courier Prime', monospace !important;
 }
