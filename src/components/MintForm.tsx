@@ -297,6 +297,7 @@ export const MintForm = () => {
           fontSize="48px"
           textAlign="center"
           fontWeight="700"
+          className="londrina-solid"
         >
           Nounify Yourself
         </Text>
@@ -306,8 +307,9 @@ export const MintForm = () => {
           color={themeVariables.dark}
           fontSize={subHeadlineFontSize}
           textAlign="center"
+          className="nouns-logo-monospace"
         >
-          Strap on the <strong>noun</strong>, and enter the Nouniverse
+          Strap on the <strong>⌐◨-◨</strong>, and enter the Nouniverse
         </Text>
       </Box>
       <Box
@@ -321,31 +323,54 @@ export const MintForm = () => {
         <Box paddingTop={6}>
           {registrationStep === RegistrationStep.START && (
             <>
-              <Box className="input-group" display="flex" alignItems="center" mb={4}>
-                <Input
-                  value={label}
-                  placeholder="Choose a name"
-                  onChange={(e) => handleUpdateLabel(e.target.value)}
-                  pr="2.5rem"
-                  bg={themeVariables.light}
+              <Box display="flex" flexDirection="row" alignItems="center" mb={4}>
+                <Box className="input-container" position="relative" flex="1">
+                  <Input
+                    value={label}
+                    placeholder="Choose a name"
+                    onChange={(e) => handleUpdateLabel(e.target.value)}
+                    bg={themeVariables.light}
+                    borderRadius="5px"
+                    border="none"
+                    p="10px"
+                    fontSize="1em"
+                    flex="1"
+                    pr="7rem"
+                  />
+                  <Text 
+                    position="absolute" 
+                    right="10px" 
+                    top="50%" 
+                    transform="translateY(-50%)" 
+                    fontSize="1em" 
+                    color="black"
+                    pointerEvents="none"
+                  >.⌐◨-◨.eth</Text>
+                  {indicators.checking && (
+                    <Box
+                      position="absolute"
+                      top="50%"
+                      left="0.5rem"
+                      transform="translateY(-50%)"
+                    >
+                      <Spinner color={themeVariables.accent} height={21} />
+                    </Box>
+                  )}
+                </Box>
+                <Button
+                  onClick={() => handleMint()}
+                  ml={4}
+                  disabled={mintBtnDisabled}
+                  color={themeVariables.light}
+                  bg="#888"
+                  _hover={{ bg: "#666" }}
                   borderRadius="5px"
-                  border="2px solid #ccc"
-                  p="10px"
-                  fontSize="1em"
-                  flex="1"
-                />
-                <Text ml={2} fontSize="1em" color="black">.noun.eth</Text>
-                {indicators.checking && (
-                  <Box
-                    position="absolute"
-                    top="50%"
-                    right="0.5rem"
-                    transform="translateY(-50%)"
-                  >
-                    <Spinner color={themeVariables.accent} height={21} />
-                  </Box>
-                )}
+                  className="londrina-solid"
+                >
+                  Mint
+                </Button>
               </Box>
+              
               {isRenting && (
                 <Box display="flex" alignItems="center" mb={3} mt={3}>
                   <Text
@@ -379,23 +404,12 @@ export const MintForm = () => {
                   />
                 </Box>
               )}
-              <Button
-                onClick={() => handleMint()}
-                ml={2}
-                disabled={mintBtnDisabled}
-                color={themeVariables.light}
-                bg="#888"
-                _hover={{ bg: "#666" }}
-                borderRadius="5px"
-              >
-                Mint
-              </Button>
               
-              <Box mt={5} p={3} bg="#ffeb3b" borderRadius="5px" fontSize="0.9em" textAlign="left">
+              <Box mt={2} p={3} bg="#ffeb3b" borderRadius="5px" fontSize="0.9em" textAlign="left" display="flex" alignItems="flex-start" flexDirection="column" width="fit-content" ml="auto">
                 <Text mb={0}>
                   Disabled button if: <br />
-                  - no input in field <br />
-                  - wallet not connected
+                  • no input in field <br />
+                  • wallet not connected
                 </Text>
               </Box>
               

@@ -5,21 +5,28 @@
 Button {
     border-radius: 5px !important;
     transition: transform 0.1s !important;
+    font-family: 'Londrina Solid', sans-serif !important;
 
     &:hover {
         transform: scale(1.03) !important;
     }
 }
 
-
-
+// Wallet Connect Button Styling
 .ju367vn {
     background: $accent !important;
     color: $light !important;
     border-color: $accent !important;
     border-radius: 20px !important;
+    font-family: 'Londrina Solid', sans-serif !important;
 }
 
 .ju367vo {
     border-radius: 12px !important;
+    font-family: 'Londrina Solid', sans-serif !important;
+}
+
+// Make all connect wallet buttons use Londrina font
+[data-rk] button span {
+    font-family: 'Londrina Solid', sans-serif !important;
 }

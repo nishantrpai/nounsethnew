@@ -1,0 +1,108 @@
+// Font styles
+.londrina-solid {
+  font-family: 'Londrina Solid', sans-serif !important;
+}
+
+// Ticker animation styles
+.ticker-container {
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.counter-section {
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.address-ticker {
+  height: 25px;
+  font-family: monospace;
+}
+
+.ticker-content {
+  left: 0;
+  top: 0;
+  width: fit-content;
+  height: 100%;
+  line-height: 25px;
+  white-space: nowrap;
+}
+
+.ticker-clone {
+  left: 100%;
+}
+
+.ticker-item {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes ticker2 {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+// Input and button styles
+.input-container {
+  position: relative;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  background: white;
+  overflow: hidden;
+}
+
+// Nouns glasses styling
+.nouns-glasses {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+// Button position when next to input
+.mint-form-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+// Styling for the nouns glasses logo
+.nouns-logo-red {
+  color: #FF0000;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.nouns-logo-monospace {
+  font-family: monospace;
+  letter-spacing: -1px;
+  font-weight: bold;
+}
+
+// Add border styling to the banner sections
+.banner-divider {
+  height: 24px;
+  width: 1px;
+  background-color: #ccc;
+  margin: 0 16px;
+}
