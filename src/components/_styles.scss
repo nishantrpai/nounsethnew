@@ -19,6 +19,10 @@
   font-family: 'Courier Prime', monospace;
   width: 100%;
   overflow: hidden;
+  
+  @media (max-width: 480px) {
+    max-width: 60%;
+  }
 }
 
 .ticker-content {
@@ -110,4 +114,33 @@
 // Courier Prime font for monospace text
 .courier-prime {
   font-family: 'Courier Prime', monospace !important;
+}
+
+// Responsive counter text
+.counter-text-desktop {
+  display: none;
+  
+  @media (min-width: 768px) {
+    display: inline;
+  }
+}
+
+.counter-text-mobile {
+  display: inline;
+  font-size: 10px;
+  
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+// Ensure tagline doesn't break on mobile
+.tagline-container {
+  white-space: nowrap;
+  text-align: center;
+  width: 100%;
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 }

@@ -308,9 +308,8 @@ export const MintForm = () => {
           textAlign="center"
           className="courier-prime"
         >
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            Strap on the <Image src={"/favicon.svg"} height={20} style={{marginTop: 5, marginRight: 0}} /> , and enter
-            the Nouniverse
+          <div className="tagline-container" style={{ display: "inline-flex", alignItems: "center", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
+            Strap on the <Image src={"/favicon.svg"} height={20} style={{marginTop: 5, marginLeft: 5, marginRight: 5}} />, and enter the Nouniverse
           </div>
         </Text>
       </Box>

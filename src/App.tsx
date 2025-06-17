@@ -50,7 +50,8 @@ const AppContainer = () => {
       <Box className="ticker-container" width="100%" py="15px" bg="#fff" borderBottom="1px solid #e0e0e0">
         <Box maxWidth="1200px" margin="0 auto" px={4} display="flex" width="100%">
           <Box flex="1" className="counter-section" display="flex" alignItems="center" justifyContent="center">
-            <span className="counter-text">12,384 ⌐◨-◨ names minted and counting...</span>
+            <span className="counter-text-desktop">12,384 ⌐◨-◨ names minted and counting...</span>
+            <span className="counter-text-mobile">12,384 ⌐◨-◨ names</span>
           </Box>
           <Box className="banner-divider"></Box>
           <Box flex="2" className="address-ticker" overflow="hidden" position="relative">
