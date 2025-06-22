@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { themeVariables } from "@/styles/themeVariables";
 import { Subname } from "./Types";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useAccount } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
 import { SideModal } from "./SideModal";
@@ -98,9 +98,10 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="flex-start"
-      paddingTop="50px"
+      paddingTop="30px"
       maxWidth="800px"
       mx="auto"
+      px={4}
     >
       {selectedSubname !== undefined && (
         <SideModal open={true} onClose={() => setSelectedSubname(undefined)}>
@@ -120,36 +121,42 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
       >
         <Text
           mt={0}
-          mb={6}
+          mb={0}
           color={themeVariables.dark}
           fontSize="48px"
           textAlign="center"
           fontWeight="700"
           className="londrina-solid"
         >
-          {subnames.totalItems > 0 ? `${subnames.totalItems} names minted` : "No names minted"}
+          {subnames.totalItems > 0
+            ? `${subnames.totalItems} names minted`
+            : "No names minted"}
         </Text>
       </Box>
-      <Box width="100%" alignSelf="center">
-        <Flex justifyContent="space-between" alignItems="center" mb={4}>
-          <Input
-            value={searchFilter}
-            onChange={(e) => setSearchFilter(e.target.value)}
-            placeholder={"Search names"}
-            borderRadius="5px"
-            width={{ base: "60%", md: "50%" }}
-            borderColor="#ccc"
-          />
-        </Flex>
-      </Box>
+      {allSubnames.length ? (
+        <Box width="100%" alignSelf="center">
+          <Flex justifyContent="space-between" alignItems="center" mb={4}>
+            <Input
+              value={searchFilter}
+              onChange={(e) => setSearchFilter(e.target.value)}
+              placeholder={"Search names"}
+              borderRadius="5px"
+              width={{ base: "60%", md: "50%" }}
+              borderColor="#ccc"
+            />
+          </Flex>
+        </Box>
+      ) : null}
       <Box
         bg="white"
         p={boxPadding}
         alignSelf="center"
-        shadow="md"
-        height="400px"
+        shadow="none"
+        height="300px"
+        width="100%"
+        maxWidth="600px"
         position="relative"
-        border="1px solid"
+        border="1px solid none"
         borderColor={themeVariables.accent}
       >
         {subnames.fetching && (
@@ -174,18 +181,30 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text color={themeVariables.dark} fontSize={24} mb={10}>
+                    <Text
+                      color={themeVariables.dark}
+                      fontSize={24}
+                      mb={8}
+                      className="courier-prime"
+                    >
                       You don't own any names.
-                    </Text>
+                    </Text>{" "}
                     <Button
                       onClick={() => setView("mint")}
-                      width="50%"
+                      height="45px"
+                      width="auto"
+                      paddingX={5}
                       color={themeVariables.light}
-                      bg={themeVariables.accent}
+                      bg="#069420"
+                      _hover={{ bg: "#009612" }}
                       className="londrina-solid"
                       fontSize="20px"
+                      borderRadius="5px"
                     >
-                      🧠 Mint a name
+                      <Box as="span" display="flex" alignItems="center">
+                        <Image src="/favicon.svg" height="22px" mr={2} />
+                        Mint a name
+                      </Box>
                     </Button>
                   </Flex>
                 )}
@@ -248,12 +267,20 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                           {subname.name}.noun.eth
                         </Text>
                         {index === 0 && (
-                          <Box ml={2} px={2} py={1} bg="black" color="white" fontSize="xs" borderRadius="2px">
+                          <Box
+                            ml={2}
+                            px={2}
+                            py={1}
+                            bg="black"
+                            color="white"
+                            fontSize="xs"
+                            borderRadius="2px"
+                          >
                             Primary
                           </Box>
                         )}
                       </Flex>
-                      <Button 
+                      <Button
                         onClick={() => setSelectedSubname(subname)}
                         size="sm"
                         color="blue.500"
@@ -267,7 +294,17 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
           </>
         )}
       </Box>
-      <Box mt={5} p={3} bg="#f8a100" borderRadius="5px" fontSize="0.9em" textAlign="left" maxWidth="600px" width="100%">
+      <Box
+        display={allSubnames.length > 0 ? "block" : "none"}
+        mt={5}
+        p={3}
+        bg="#f8a100"
+        borderRadius="5px"
+        fontSize="0.9em"
+        textAlign="left"
+        maxWidth="600px"
+        width="100%"
+      >
         <Text mb={0}>
           Manage name navs users to ens.app: https://app.ens.domains/{"{name}"}
         </Text>
