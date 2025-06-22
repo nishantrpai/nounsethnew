@@ -125,8 +125,9 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
           fontSize="48px"
           textAlign="center"
           fontWeight="700"
+          className="londrina-solid"
         >
-          {subnames.totalItems} names minted
+          {subnames.totalItems > 0 ? `${subnames.totalItems} names minted` : "No names minted"}
         </Text>
       </Box>
       <Box width="100%" alignSelf="center">
@@ -173,16 +174,18 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <Text color={themeVariables.accent} fontSize={24} mb={10}>
-                      You don't own any subname
+                    <Text color={themeVariables.dark} fontSize={24} mb={10}>
+                      You don't own any names.
                     </Text>
                     <Button
                       onClick={() => setView("mint")}
                       width="50%"
                       color={themeVariables.light}
                       bg={themeVariables.accent}
+                      className="londrina-solid"
+                      fontSize="20px"
                     >
-                      Register
+                      🧠 Mint a name
                     </Button>
                   </Flex>
                 )}

@@ -26,6 +26,7 @@ import { themeVariables } from "@/styles/themeVariables";
 import { toast, ToastContainer } from "react-toastify";
 import { mainnet, sepolia, base, optimism } from "viem/chains";
 import { useAppConfig } from "./AppConfigContext";
+import { MintSuccess } from "./MintSuccess";
 
 enum RegistrationStep {
   START = 0,
@@ -64,6 +65,7 @@ export const MintForm = () => {
   const [registrationStep, setRegistrationStep] = useState(
     RegistrationStep.START
   );
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [primaryNameIndicators, setPrimaryNameIndicators] = useState<{
     waiting: boolean;
@@ -173,7 +175,10 @@ export const MintForm = () => {
       setRegistrationStep(RegistrationStep.TX_SENT);
       setMintIndicator({ btnLabel: "Registering...", waiting: true });
       await waitForTx(tx);
+      setShowSuccess(true);
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
+      // Auto-hide success animation after 3 seconds
+      setTimeout(() => setShowSuccess(false), 3000);
     } catch (err: any) {
       console.error(err);
       if (err?.cause?.details?.includes("User denied transaction signatur")) {
@@ -370,8 +375,8 @@ export const MintForm = () => {
                   ml={4}
                   disabled={mintBtnDisabled}
                   color={themeVariables.light}
-                  bg="#888"
-                  _hover={{ bg: "#666" }}
+                  bg={indicators.available && !noLabel && !indicators.checking ? '#069420' : "#888"}
+                  _hover={{ bg: indicators.available && !noLabel && !indicators.checking ? "#069420" : "#666" }}
                   borderRadius="5px"
                   className="londrina-solid mint-btn"
                 >
@@ -413,7 +418,7 @@ export const MintForm = () => {
                 </Box>
               )}
 
-              <Box
+              {/* <Box
                 mt={2}
                 p={3}
                 bg="#F2A730"
@@ -428,9 +433,11 @@ export const MintForm = () => {
               >
                 <Text mb={0}>
                   Disabled button if: <br />
-                  • no input in field <br />• wallet not connected
-                </Text>
-              </Box>
+                  • no input in field <br />
+                  • wallet not connected <br />
+                  • name is already taken
+                </Text> 
+              </Box> */}
 
               {subnameTakenErr && (
                 <Text
@@ -439,7 +446,7 @@ export const MintForm = () => {
                   mt={5}
                   mb={0}
                 >
-                  Subname is already registered
+                  {label} is already registered.
                 </Text>
               )}
               {mintError.length > 0 && (
@@ -507,8 +514,9 @@ export const MintForm = () => {
                 fontSize={24}
                 mt={2}
                 mb={4}
+                className="londrina-solid"
               >
-                You have registered
+                Nounification complete!
               </Text>
               <Box display="flex" justifyContent="center" mb={1}>
                 <Box
@@ -572,8 +580,9 @@ export const MintForm = () => {
                 fontSize={24}
                 mt={2}
                 mb={4}
+                className="londrina-solid"
               >
-                You have registered
+                Nounification complete!
               </Text>
               <Box display="flex" justifyContent="center" mb={1}>
                 <Box
@@ -642,6 +651,7 @@ export const MintForm = () => {
         }}
         hideProgressBar
       />
+      <MintSuccess active={showSuccess} />
     </Grid>
   );
 };
