@@ -131,13 +131,7 @@ export const MintForm = () => {
     if (chainId !== listingChainId) {
       await switchChainAsync({ chainId: listingChainId });
     }
-    // Use standard ETH address records with the correct field names
-    const addresses: { value: string; chain: number }[] = [
-      {
-        value: address,
-        chain: mainnet.id, // Ethereum mainnet
-      }
-    ];
+    // We'll directly use the address format when calling mintParameters
 
     const texts: { key: string; value: string }[] = [];
 

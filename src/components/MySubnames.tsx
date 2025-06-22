@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { themeVariables } from "@/styles/themeVariables";
 import { Subname } from "./Types";
-import axios, { all } from "axios";
+import axios from "axios";
 import { useAccount } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
 import { SideModal } from "./SideModal";
