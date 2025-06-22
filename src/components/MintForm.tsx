@@ -24,7 +24,7 @@ import { Address, Hash, parseAbi } from "viem";
 import { FaArrowDown, FaArrowUp, FaX } from "react-icons/fa6";
 import { themeVariables } from "@/styles/themeVariables";
 import { toast, ToastContainer } from "react-toastify";
-import { mainnet, sepolia, base, optimism } from "viem/chains";
+import { mainnet, sepolia } from "viem/chains";
 import { useAppConfig } from "./AppConfigContext";
 import { MintSuccess } from "./MintSuccess";
 
@@ -35,9 +35,7 @@ enum RegistrationStep {
   COMPLETE = 3,
 }
 
-const ETH_COIN = 60;
-const BASE_COIN = 2147492101;
-const OP_COIN = 2147483658;
+// No coin type constants needed
 
 export const MintForm = () => {
   const { isRenting, listedName, listingChainId, isTestnet, defaultAvatarUri } =
@@ -133,22 +131,12 @@ export const MintForm = () => {
     if (chainId !== listingChainId) {
       await switchChainAsync({ chainId: listingChainId });
     }
-    const addresses: { coin: number; value: string; chain: number }[] = [
+    // Use standard ETH address records with the correct field names
+    const addresses: { value: string; chain: number }[] = [
       {
         value: address,
-        coin: ETH_COIN,
-        chain: mainnet.id,
-      },
-      {
-        value: address,
-        coin: BASE_COIN,
-        chain: base.id,
-      },
-      {
-        value: address,
-        coin: OP_COIN,
-        chain: optimism.id,
-      },
+        chain: mainnet.id, // Ethereum mainnet
+      }
     ];
 
     const texts: { key: string; value: string }[] = [];
@@ -159,11 +147,23 @@ export const MintForm = () => {
 
     try {
       setMintIndicator({ btnLabel: "Waiting for wallet", waiting: true });
+      
+      // Debug for detecting address record issues
+      console.log("Debug - Mint Records:", {
+        address,
+        chain: mainnet.id,
+        texts
+      });
+      
+      // Use standard ETH address format with chain rather than coin
       const params = await mintParameters({
         minterAddress: address,
         expiryInYears: expiryYears,
         records: {
-          addresses: addresses,
+          addresses: [{
+            value: address,
+            chain: mainnet.id,
+          }],
           texts: texts,
         },
         label: label,
@@ -195,7 +195,7 @@ export const MintForm = () => {
 
   const parseError = (errMessage: string) => {
     if (errMessage.includes("MINTER_NOT_TOKEN_OWNER")) {
-      setMintError("You don't have enought tokens for minting!");
+      setMintError("You don't have enough tokens for minting!");
     } else if (errMessage.includes("SUBNAME_TAKEN")) {
       setMintError("Subname is already taken");
     } else if (errMessage.includes("MINTER_NOT_WHITELISTED")) {
@@ -206,8 +206,10 @@ export const MintForm = () => {
       setMintError("Subname is reserved");
     } else if (errMessage.includes("VERIFIED_MINTER_ADDRESS_REQUIRED")) {
       setMintError("Verification required");
+    } else if (errMessage.includes("Unsupported coin type")) {
+      setMintError("Unsupported blockchain configuration");
     } else {
-      setMintError("Unknown error ocurred. Check console for more info");
+      setMintError("Unknown error occurred. Please try again.");
     }
   };
 
@@ -305,18 +307,21 @@ export const MintForm = () => {
         >
           Nounify Yourself
         </Text>
-        <Text
+        <Box 
           mt={0}
           mb={0}
           color={themeVariables.dark}
           fontSize={subHeadlineFontSize}
           textAlign="center"
-          className="courier-prime"
+          className="courier-prime tagline-container"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="nowrap"
+          whiteSpace="nowrap"
         >
-          <div className="tagline-container" style={{ display: "inline-flex", alignItems: "center", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
-            Strap on the <Image src={"/favicon.svg"} height={20} style={{marginTop: 5, marginLeft: 5, marginRight: 5}} />, and enter the Nouniverse
-          </div>
-        </Text>
+          Strap on the <Image src={"/favicon.svg"} height={20} mx={1} mt={1} />, and enter the Nouniverse
+        </Box>
       </Box>
       <Box
         bg="transparent"

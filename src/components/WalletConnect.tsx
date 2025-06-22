@@ -1,6 +1,6 @@
 import "@rainbow-me/rainbowkit/styles.css";
 
-import { getDefaultConfig, darkTheme, RainbowKitProvider, Theme } from "@rainbow-me/rainbowkit";
+import { getDefaultConfig, lightTheme, RainbowKitProvider, Theme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { mainnet, sepolia, base, optimism, arbitrum, baseSepolia } from "viem/chains";
 import { PropsWithChildren } from "react";
@@ -9,7 +9,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { themeVariables } from "@/styles/themeVariables";
 
 
-const myTheme = merge(darkTheme(), {
+const myTheme = merge(lightTheme(), {
   colors: {
     accentColor: themeVariables.accent,
     profileActionHover: themeVariables.accent,
