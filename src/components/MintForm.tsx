@@ -131,7 +131,6 @@ export const MintForm = () => {
     if (chainId !== listingChainId) {
       await switchChainAsync({ chainId: listingChainId });
     }
-    // We'll directly use the address format when calling mintParameters
 
     const texts: { key: string; value: string }[] = [];
 
@@ -141,29 +140,19 @@ export const MintForm = () => {
 
     try {
       setMintIndicator({ btnLabel: "Waiting for wallet", waiting: true });
-      
-      // Debug for detecting address record issues
-      console.log("Debug - Mint Records:", {
-        address,
-        chain: mainnet.id,
-        texts
-      });
-      
-      // Use standard ETH address format with chain rather than coin
+      // Simplified mint parameters - don't include address records to avoid coin type errors
       const params = await mintParameters({
         minterAddress: address,
         expiryInYears: expiryYears,
         records: {
-          addresses: [{
-            value: address,
-            chain: mainnet.id,
-          }],
+          // Removing addresses property completely to avoid coin type issues
           texts: texts,
         },
         label: label,
         parentName: listedName,
         owner: address!,
       });
+      
       const tx = await executeTx(params, address);
       setTxHash(tx);
       setRegistrationStep(RegistrationStep.TX_SENT);
