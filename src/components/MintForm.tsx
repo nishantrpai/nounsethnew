@@ -549,11 +549,11 @@ export const MintForm = () => {
                 width="100%"
                 mb={3}
                 height="45px"
+                fontSize="18px"
                 disabled={primaryNameIndicators.waiting}
                 className="londrina-solid"
-                fontSize="20px"
               >
-                {primaryNameIndicators.waiting ? primaryNameIndicators.btnLabel : "Set as primary name"}
+                {primaryNameIndicators.btnLabel}
               </Button>
               <Button
                 onClick={() => {
@@ -561,12 +561,13 @@ export const MintForm = () => {
                   setRegistrationStep(RegistrationStep.START);
                 }}
                 bg={themeVariables.main}
+                _hover={{ bg: "#444" }}
                 color={themeVariables.light}
                 width="100%"
                 height="45px"
+                fontSize="18px"
                 disabled={primaryNameIndicators.waiting}
                 className="londrina-solid"
-                fontSize="20px"
               >
                 Back to home
               </Button>
@@ -626,7 +627,7 @@ export const MintForm = () => {
                   textDecorationColor: themeVariables.accent,
                 }}
               >
-                <Text color="white" fontSize={20} textAlign="center" className="londrina-solid">
+                <Text color="white" fontSize={24} textAlign="center">
                   Share on X
                 </Text>
               </Link>
@@ -635,12 +636,14 @@ export const MintForm = () => {
                   setLabel("");
                   setRegistrationStep(RegistrationStep.START);
                 }}
-                bg={themeVariables.accent}
+                bg="#069420"
+                _hover={{ bg: "#04891c" }}
+                _active={{ bg: "#037d18" }}
                 color={themeVariables.light}
                 width="100%"
                 height="45px"
+                fontSize="18px"
                 className="londrina-solid"
-                fontSize="20px"
               >
                 Back to home
               </Button>

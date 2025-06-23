@@ -22,9 +22,16 @@ const partyEmoji = keyframes`
   100% { transform: translateY(-120px) scale(1) rotate(-10deg); opacity: 0; }
 `;
 
+const glassesEmoji = keyframes`
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  40% { transform: translateY(-40px) scale(1.3); opacity: 1; }
+  60% { transform: translateY(-70px) scale(1.4) rotate(10deg); opacity: 1; }
+  100% { transform: translateY(-150px) scale(1) rotate(-5deg); opacity: 0; }
+`;
+
 // Emoji options with more noun-themed celebration
 const emojiTypes = ['🔥', '✨', '🎉', '🥳', '🎊', '🎯', '🌟', '⚡'];
-const nounEmojis = ['👓', '🤓', '😎', '🧠', '🎭', '🎨'];
+const nounEmojis = ['👓', '🤓', '😎', '🧠', '🎭', '🎨', '🔍'];
 
 interface MintSuccessProps {
   active: boolean;
@@ -51,13 +58,13 @@ export const MintSuccess = ({ active }: MintSuccessProps) => {
     window.addEventListener('resize', handleResize);
     
     // Create initial burst of emojis
-    const initialEmojis = Array.from({ length: 20 }, (_, i) => ({
+    const initialEmojis = Array.from({ length: 25 }, (_, i) => ({
       id: i,
       type: i % 3 === 0 
         ? nounEmojis[Math.floor(Math.random() * nounEmojis.length)]
         : emojiTypes[Math.floor(Math.random() * emojiTypes.length)],
       left: Math.random() * 100, // Random position across container
-      animType: ['fire', 'sparkle', 'party'][Math.floor(Math.random() * 3)]
+      animType: i % 5 === 0 ? 'glasses' : ['fire', 'sparkle', 'party'][Math.floor(Math.random() * 3)]
     }));
     
     setEmojis(initialEmojis);
@@ -68,14 +75,14 @@ export const MintSuccess = ({ active }: MintSuccessProps) => {
         ...prev,
         {
           id: Date.now(),
-          type: Math.random() > 0.4 
+          type: Math.random() > 0.6 
             ? emojiTypes[Math.floor(Math.random() * emojiTypes.length)]
             : nounEmojis[Math.floor(Math.random() * nounEmojis.length)],
           left: Math.random() * 100,
-          animType: ['fire', 'sparkle', 'party'][Math.floor(Math.random() * 3)]
+          animType: Math.random() > 0.75 ? 'glasses' : ['fire', 'sparkle', 'party'][Math.floor(Math.random() * 3)]
         }
       ]);
-    }, 250);
+    }, 200); // Faster for more celebration
     
     // Cleanup
     return () => {
@@ -91,6 +98,7 @@ export const MintSuccess = ({ active }: MintSuccessProps) => {
     switch(type) {
       case 'fire': return fireEmoji;
       case 'sparkle': return sparkleEmoji;
+      case 'glasses': return glassesEmoji;
       default: return partyEmoji;
     }
   };
@@ -101,21 +109,24 @@ export const MintSuccess = ({ active }: MintSuccessProps) => {
       <ReactConfetti
         width={windowDimensions.width}
         height={windowDimensions.height}
-        numberOfPieces={300}
+        numberOfPieces={350}
         recycle={false}
-        gravity={0.12}
-        initialVelocityY={10}
-        tweenDuration={5000}
+        gravity={0.1}
+        initialVelocityY={15}
+        tweenDuration={7000}
+        friction={0.99}
         colors={[
-          '#FF0000', // Red
+          '#FF0000', // Red (Nouns color)
           '#FFD700', // Gold
           '#00BFFF', // Deep Sky Blue
           '#32CD32', // Lime Green
           '#FF69B4', // Hot Pink
           '#FFA500', // Orange
           '#9400D3', // Violet
-          '#00FF00', // Green (Nouns color)
-          '#FF00FF'  // Magenta
+          '#00FF00', // Green
+          '#FF00FF', // Magenta
+          '#000000', // Black (for Nouns glasses effect)
+          '#FFFFFF'  // White
         ]}
       />
       
@@ -136,7 +147,7 @@ export const MintSuccess = ({ active }: MintSuccessProps) => {
             position="absolute"
             bottom="0"
             left={`${emoji.left}%`}
-            fontSize={emoji.type.includes('👓') ? "38px" : "28px"}
+            fontSize={emoji.type.includes('👓') || emoji.type.includes('🤓') || emoji.type.includes('😎') ? "38px" : "28px"}
             animation={`${getAnimation(emoji.animType)} ${Math.random() * 1 + 1.8}s ease-out forwards`}
           >
             {emoji.type}
