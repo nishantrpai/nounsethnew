@@ -156,7 +156,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
         parentName: listedName,
         owner: address!,
       });
-      
+
       const tx = await executeTx(params, address);
       setTxHash(tx);
       setRegistrationStep(RegistrationStep.TX_SENT);
@@ -166,7 +166,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
       // Auto-hide success animation after 7 seconds to give more time to enjoy the celebration
       setTimeout(() => setShowSuccess(false), 7000);
-      
+
       // Notify parent component about successful mint after showing success briefly
       setTimeout(() => {
         if (onSuccessfulMint) {
@@ -301,7 +301,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
         >
           Nounify Yourself
         </Text>
-        <Box 
+        <Box
           mt={0}
           mb={0}
           color={themeVariables.dark}
@@ -314,7 +314,8 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
           flexWrap="nowrap"
           whiteSpace="nowrap"
         >
-          Strap on the <Image src={"/inline.svg"} height={6} mx={1} mt={1} />, and enter the Nouniverse
+          Strap on the <Image src={"/inline.svg"} height={6} mx={1} mt={1} />,
+          and enter the Nouniverse
         </Box>
       </Box>
       <Box
@@ -340,12 +341,14 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                     placeholder="Choose a name"
                     onChange={(e) => handleUpdateLabel(e.target.value)}
                     bg={themeVariables.light}
+                    className="satoshi-font"
                     borderRadius="5px"
                     border="none"
                     p="10px"
                     fontSize="1em"
                     flex="1"
                     pr="7rem"
+                    fontFamily="'Satoshi', sans-serif"
                   />
                   <Text
                     position="absolute"
@@ -355,6 +358,8 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                     fontSize="1em"
                     color="black"
                     pointerEvents="none"
+                    className="satoshi-font"
+                    fontFamily="'Satoshi', sans-serif"
                   >
                     .⌐◨-◨.eth
                   </Text>
@@ -374,15 +379,31 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   ml={4}
                   disabled={mintBtnDisabled}
                   color={themeVariables.light}
-                  bg={indicators.available && !noLabel && !indicators.checking ? '#069420' : "#888"}
-                  _hover={{ bg: indicators.available && !noLabel && !indicators.checking ? "#04891c" : "#666" }}
-                  _active={{ bg: indicators.available && !noLabel && !indicators.checking ? "#037d18" : "#555" }}
+                  bg={
+                    indicators.available && !noLabel && !indicators.checking
+                      ? "#069420"
+                      : "#888"
+                  }
+                  _hover={{
+                    bg:
+                      indicators.available && !noLabel && !indicators.checking
+                        ? "#04891c"
+                        : "#666",
+                  }}
+                  _active={{
+                    bg:
+                      indicators.available && !noLabel && !indicators.checking
+                        ? "#037d18"
+                        : "#555",
+                  }}
                   borderRadius="5px"
                   className="londrina-solid mint-btn"
                   fontSize="18px"
                   transition="all 0.2s ease"
                 >
-                  {indicators.available && !noLabel && !indicators.checking ? 'Mint' : 'Mint'}
+                  {indicators.available && !noLabel && !indicators.checking
+                    ? "Mint"
+                    : "Mint"}
                 </Button>
               </Box>
 
