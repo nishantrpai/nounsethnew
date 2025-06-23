@@ -7,6 +7,18 @@
   font-family: 'Satoshi', sans-serif !important;
 }
 
+// Utility classes
+.hidden {
+  display: none !important;
+}
+
+// Success mode styling
+.success-mode {
+  .tagline-container {
+    display: none !important;
+  }
+}
+
 // Ticker animation styles
 .ticker-container {
   overflow: hidden;
@@ -202,7 +214,6 @@
 }
 
 .success-avatar {
-  animation: bounceIn 0.8s ease-out, rotateAvatar 3s 0.8s infinite ease-in-out;
   transform-origin: center;
   box-shadow: 0 0 30px rgba(255,165,0,0.6);
 }

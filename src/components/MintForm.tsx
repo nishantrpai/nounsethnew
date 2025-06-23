@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
   Text,
   Image,
   useBreakpointValue,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useNamepsaceClient } from "./useNamespaceClient";
 import { normalize } from "viem/ens";
@@ -68,6 +69,18 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
     RegistrationStep.START
   );
   const [showSuccess, setShowSuccess] = useState(false);
+  const [debugMode, setDebugMode] = useState(false);
+  
+  // Check if we're in debug mode with URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('debugSuccessScreen') === 'true') {
+      setDebugMode(true);
+      setLabel('debug-name');
+      setRegistrationStep(RegistrationStep.PRIMARY_NAME);
+      setShowSuccess(true);
+    }
+  }, []);
 
   const [primaryNameIndicators, setPrimaryNameIndicators] = useState<{
     waiting: boolean;
@@ -164,10 +177,9 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
       await waitForTx(tx);
       setShowSuccess(true);
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
-      // Auto-hide success animation after 7 seconds to give more time to enjoy the celebration
-      setTimeout(() => setShowSuccess(false), 7000);
       
-      // Removed auto-navigation - user must now explicitly choose to navigate away
+      // Keep success screen visible until user interaction
+      // No auto-hide or auto-navigation - user must now explicitly choose to navigate away
     } catch (err: any) {
       console.error(err);
       if (err?.cause?.details?.includes("User denied transaction signatur")) {
@@ -270,13 +282,23 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
     }
   };
 
+  // Debugging effect to bypass minting process
+  useEffect(() => {
+    const debugSkipMinting = false; // Set to true to skip minting for debugging
+    if (debugSkipMinting) {
+      setLabel("debugname");
+      setRegistrationStep(RegistrationStep.PRIMARY_NAME);
+    }
+  }, []);
+
   return (
     <Grid
       display="flex"
       flexDirection="column"
       alignItems="center"
       justifyContent="flex-start"
-      paddingTop="50px"
+      paddingTop={showSuccess ? "20px" : "50px"}
+      className={showSuccess ? "success-mode" : ""}
     >
       <Box
         display="flex"
@@ -284,6 +306,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
         alignItems="center"
         mb={0}
         alignSelf="center"
+        className={showSuccess ? "hidden" : ""}
       >
         <Text
           mt={0}
@@ -436,26 +459,38 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                 </Box>
               )}
 
-              {/* <Box
-                mt={2}
-                p={3}
-                bg="#F2A730"
-                borderRadius="5px"
-                fontSize="0.9em"
-                textAlign="left"
-                display="flex"
-                alignItems="flex-start"
-                flexDirection="column"
-                width="fit-content"
-                ml="auto"
-              >
-                <Text mb={0}>
-                  Disabled button if: <br />
-                  • no input in field <br />
-                  • wallet not connected <br />
-                  • name is already taken
-                </Text> 
-              </Box> */}
+              {/* Development debug tools */}
+              {process.env.NODE_ENV === 'development' && (
+                <Box
+                  mt={4}
+                  p={3}
+                  bg="#333"
+                  borderRadius="5px"
+                  fontSize="0.9em"
+                  textAlign="left"
+                  display="flex"
+                  alignItems="center"
+                  width="fit-content"
+                >
+                  <Button
+                    onClick={() => {
+                      setLabel('debug-name');
+                      setRegistrationStep(RegistrationStep.PRIMARY_NAME);
+                      setShowSuccess(true);
+                    }}
+                    size="sm"
+                    bg="#555"
+                    color="white"
+                    _hover={{ bg: "#666" }}
+                    fontSize="12px"
+                  >
+                    Show Success Screen
+                  </Button>
+                  <Text ml={2} fontSize="12px" color="#999" mb={0}>
+                    (Debug only)
+                  </Text>
+                </Box>
+              )}
 
               {subnameTakenErr && (
                 <Text
@@ -526,53 +561,37 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
           )}
           {registrationStep === RegistrationStep.PRIMARY_NAME && (
             <Grid templateColumns="1fr" justifyItems="center" width="100%">
-              {/* Main header with name centered */}
-              <Box textAlign="center" width="100%" mb={8}>
+              {/* Domain name only with inline SVG - centered */}
+              <Box textAlign="center" width="100%" mb={4}>
                 <Text
-                  fontSize="36px"
+                  fontSize="42px"
                   fontWeight="bold"
                   className="londrina-solid"
+                  lineHeight="1.2"
                 >
                   <Box display="inline" color={themeVariables.accent}>
-                    {label}
+                    {label}.
                   </Box>
-                  <Box as="span" color={themeVariables.light}>
-                    .{listedName}
+                  <Box as="span" color={themeVariables.dark}>
+                    <Image src="/inline.svg" height={30} display="inline" />
+                    .eth
                   </Box>
                 </Text>
               </Box>
               
+              {/* Success message */}
               <Text
                 textAlign="center"
-                color={themeVariables.light}
+                color={themeVariables.dark}
                 fontSize={30}
                 mb={6}
-                className="londrina-solid nounification-complete"
+                className="londrina-solid"
               >
                 Nounification complete!
               </Text>
               
-              <Box 
-                display="flex" 
-                justifyContent="center" 
-                mb={6} 
-                width="100%"
-                position="relative"
-              >
-                <Image
-                  src={defaultAvatarUri || "/favicon.svg"}
-                  alt="Nouns Avatar"
-                  borderRadius="40px"
-                  border="2px solid"
-                  borderColor={themeVariables.accent}
-                  width="120px"
-                  height="120px"
-                  className="success-avatar"
-                />
-              </Box>
-              
-              {/* Buttons section */}
-              <Box width="100%" display="flex" flexDirection="column" gap={4} mt={2}>
+              {/* Buttons section - row layout */}
+              <Box width="100%" display="flex" flexDirection="row" gap={4} mt={2} justifyContent="center">
                 <Button
                   onClick={() => handlePrimaryName()}
                   bg="#069420"
@@ -581,10 +600,13 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   color={themeVariables.light}
                   height="45px"
                   fontSize="18px"
+                  flexBasis="50%"
                   disabled={primaryNameIndicators.waiting}
                   className="londrina-solid"
                 >
-                  <Box as="span" mr={2} display="inline-block">👓</Box>
+                  <Box as="span" mr={2} display="inline-block">
+                    <Image src="/inline.svg" height="20px" />
+                  </Box>
                   {primaryNameIndicators.btnLabel}
                 </Button>
                 
@@ -592,16 +614,18 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   onClick={() => {
                     setLabel("");
                     setRegistrationStep(RegistrationStep.START);
+                    setShowSuccess(false);
                   }}
                   bg="#333333"
                   _hover={{ bg: "#444444" }}
                   color={themeVariables.light}
                   height="45px"
                   fontSize="18px"
+                  flexBasis="50%" 
                   disabled={primaryNameIndicators.waiting}
                   className="londrina-solid"
                 >
-                  Back to home
+                  Go back home
                 </Button>
               </Box>
               
@@ -624,28 +648,29 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
           )}
           {registrationStep === RegistrationStep.COMPLETE && (
             <Grid templateColumns="1fr" justifyItems="center" width="100%">
-              {/* Main header with name centered */}
-              <Box textAlign="center" width="100%" mb={8}>
+              {/* Domain name only with inline SVG - centered */}
+              <Box textAlign="center" width="100%" mb={4}>
                 <Text
-                  fontSize="36px"
+                  fontSize="42px"
                   fontWeight="bold"
                   className="londrina-solid"
+                  lineHeight="1.2"
                 >
                   <Box display="inline" color={themeVariables.accent}>
                     {label}
                   </Box>
                   <Box as="span" color={themeVariables.light}>
-                    .{listedName}
+                    <Box as="span">.⌐◨-◨</Box>.eth
                   </Box>
                 </Text>
               </Box>
               
               <Text
                 textAlign="center"
-                color={themeVariables.light}
+                color={themeVariables.dark}
                 fontSize={30}
                 mb={6}
-                className="londrina-solid nounification-complete"
+                className="londrina-solid"
               >
                 Nounification complete!
               </Text>
@@ -687,8 +712,8 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                 </Text>
               </Link>
               
-              {/* Buttons section */}
-              <Box width="100%" display="flex" flexDirection="column" gap={4} mt={2}>
+              {/* Buttons section - row layout */}
+              <Box width="100%" display="flex" flexDirection="row" gap={4} mt={2} justifyContent="center">
                 <Button
                   onClick={() => {
                     if (onSuccessfulMint) {
@@ -701,6 +726,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   color={themeVariables.light}
                   height="45px"
                   fontSize="18px"
+                  flexBasis="50%"
                   className="londrina-solid"
                 >
                   <Box as="span" mr={2} display="inline-block">📇</Box>
@@ -711,15 +737,17 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   onClick={() => {
                     setLabel("");
                     setRegistrationStep(RegistrationStep.START);
+                    setShowSuccess(false);
                   }}
                   bg="#333333"
                   _hover={{ bg: "#444444" }}
                   color={themeVariables.light}
                   height="45px"
                   fontSize="18px"
+                  flexBasis="50%"
                   className="londrina-solid"
                 >
-                  Back to home
+                  Go back home
                 </Button>
               </Box>
               
