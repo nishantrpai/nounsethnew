@@ -10,13 +10,13 @@
 }
 
 .counter-section {
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Satoshi', sans-serif;
   font-size: 14px;
 }
 
 .address-ticker {
   height: 25px;
-  font-family: 'Courier Prime', monospace;
+  font-family: 'Satoshi', sans-serif;
   width: 100%;
   overflow: hidden;
   
@@ -109,8 +109,8 @@
 }
 
 .nouns-logo-monospace {
-  font-family: 'Courier Prime', monospace;
-  letter-spacing: -1px;
+  font-family: 'Satoshi', sans-serif;
+  letter-spacing: -0.5px;
   font-weight: bold;
 }
 
@@ -122,14 +122,14 @@
   margin: 0 16px;
 }
 
-// Any elements with this class will use Courier Prime
+// Any elements with this class will use Satoshi font
 .courier-font {
-  font-family: 'Courier Prime', monospace !important;
+  font-family: 'Satoshi', sans-serif !important;
 }
 
-// Courier Prime font for monospace text
+// Satoshi font for text (formerly Courier Prime)
 .courier-prime {
-  font-family: 'Courier Prime', monospace !important;
+  font-family: 'Satoshi', sans-serif !important;
 }
 
 // Responsive counter text
