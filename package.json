@@ -35,6 +35,7 @@
     "qrcode": "^1.5.4",
     "qrcode-with-logos": "^1.1.1",
     "react": "^18.3.1",
+    "react-confetti": "^6.4.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-spinners": "^0.15.0",

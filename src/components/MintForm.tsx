@@ -68,7 +68,7 @@ export const MintForm = () => {
   const [primaryNameIndicators, setPrimaryNameIndicators] = useState<{
     waiting: boolean;
     btnLabel: string;
-  }>({ waiting: false, btnLabel: "Set primary name!" });
+  }>({ waiting: false, btnLabel: "Set as primary name" });
 
   let reverseRegistarAbi;
   let reverseRegistar;
@@ -160,8 +160,8 @@ export const MintForm = () => {
       await waitForTx(tx);
       setShowSuccess(true);
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
-      // Auto-hide success animation after 3 seconds
-      setTimeout(() => setShowSuccess(false), 3000);
+      // Auto-hide success animation after 7 seconds to give more time to enjoy the celebration
+      setTimeout(() => setShowSuccess(false), 7000);
     } catch (err: any) {
       console.error(err);
       if (err?.cause?.details?.includes("User denied transaction signatur")) {
@@ -258,7 +258,7 @@ export const MintForm = () => {
       }
     } finally {
       setPrimaryNameIndicators({
-        btnLabel: "Set primary name!",
+        btnLabel: "Set as primary name",
         waiting: false,
       });
     }
@@ -364,11 +364,14 @@ export const MintForm = () => {
                   disabled={mintBtnDisabled}
                   color={themeVariables.light}
                   bg={indicators.available && !noLabel && !indicators.checking ? '#069420' : "#888"}
-                  _hover={{ bg: indicators.available && !noLabel && !indicators.checking ? "#069420" : "#666" }}
+                  _hover={{ bg: indicators.available && !noLabel && !indicators.checking ? "#04891c" : "#666" }}
+                  _active={{ bg: indicators.available && !noLabel && !indicators.checking ? "#037d18" : "#555" }}
                   borderRadius="5px"
                   className="londrina-solid mint-btn"
+                  fontSize="18px"
+                  transition="all 0.2s ease"
                 >
-                  Mint
+                  {indicators.available && !noLabel && !indicators.checking ? 'Mint' : 'Mint'}
                 </Button>
               </Box>
 
@@ -499,10 +502,10 @@ export const MintForm = () => {
               <Text
                 textAlign="center"
                 color={themeVariables.light}
-                fontSize={24}
+                fontSize={30}
                 mt={2}
                 mb={4}
-                className="londrina-solid"
+                className="londrina-solid nounification-complete"
               >
                 Nounification complete!
               </Text>
@@ -516,6 +519,7 @@ export const MintForm = () => {
                   border="2px solid"
                   borderColor={themeVariables.accent}
                   boxSize="120px"
+                  className="success-avatar"
                 />
               </Box>
               <Link
@@ -538,13 +542,18 @@ export const MintForm = () => {
               </Link>
               <Button
                 onClick={() => handlePrimaryName()}
-                bg={themeVariables.accent}
+                bg="#069420"
+                _hover={{ bg: "#04891c" }}
+                _active={{ bg: "#037d18" }}
                 color={themeVariables.light}
                 width="100%"
-                mb={2}
+                mb={3}
+                height="45px"
                 disabled={primaryNameIndicators.waiting}
+                className="londrina-solid"
+                fontSize="20px"
               >
-                {primaryNameIndicators.btnLabel}
+                {primaryNameIndicators.waiting ? primaryNameIndicators.btnLabel : "Set as primary name"}
               </Button>
               <Button
                 onClick={() => {
@@ -553,10 +562,13 @@ export const MintForm = () => {
                 }}
                 bg={themeVariables.main}
                 color={themeVariables.light}
-                width="95%"
+                width="100%"
+                height="45px"
                 disabled={primaryNameIndicators.waiting}
+                className="londrina-solid"
+                fontSize="20px"
               >
-                Finish
+                Back to home
               </Button>
             </Grid>
           )}
@@ -565,10 +577,10 @@ export const MintForm = () => {
               <Text
                 textAlign="center"
                 color={themeVariables.light}
-                fontSize={24}
+                fontSize={30}
                 mt={2}
                 mb={4}
-                className="londrina-solid"
+                className="londrina-solid nounification-complete"
               >
                 Nounification complete!
               </Text>
@@ -582,6 +594,7 @@ export const MintForm = () => {
                   border="2px solid"
                   borderColor={themeVariables.accent}
                   boxSize="120px"
+                  className="success-avatar"
                 />
               </Box>
               <Link
@@ -606,14 +619,14 @@ export const MintForm = () => {
                 href={`https://x.com/intent/tweet?text=I just minted ${label}.${listedName} via @namespace_eth!`}
                 target="_blank"
                 rel="noopener noreferrer"
-                mb={2}
+                mb={3}
                 textDecoration="none"
                 _hover={{
                   textDecoration: "underline",
                   textDecorationColor: themeVariables.accent,
                 }}
               >
-                <Text color="white" fontSize={30} textAlign="center">
+                <Text color="white" fontSize={20} textAlign="center" className="londrina-solid">
                   Share on X
                 </Text>
               </Link>
@@ -625,8 +638,11 @@ export const MintForm = () => {
                 bg={themeVariables.accent}
                 color={themeVariables.light}
                 width="100%"
+                height="45px"
+                className="londrina-solid"
+                fontSize="20px"
               >
-                Great!
+                Back to home
               </Button>
             </Grid>
           )}
