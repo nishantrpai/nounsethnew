@@ -166,13 +166,8 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
       // Auto-hide success animation after 7 seconds to give more time to enjoy the celebration
       setTimeout(() => setShowSuccess(false), 7000);
-
-      // Notify parent component about successful mint after showing success briefly
-      setTimeout(() => {
-        if (onSuccessfulMint) {
-          onSuccessfulMint();
-        }
-      }, 5000);
+      
+      // Removed auto-navigation - user must now explicitly choose to navigate away
     } catch (err: any) {
       console.error(err);
       if (err?.cause?.details?.includes("User denied transaction signatur")) {
@@ -530,140 +525,170 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
             </Grid>
           )}
           {registrationStep === RegistrationStep.PRIMARY_NAME && (
-            <Grid templateColumns="1fr" justifyItems="center">
+            <Grid templateColumns="1fr" justifyItems="center" width="100%">
+              {/* Main header with name centered */}
+              <Box textAlign="center" width="100%" mb={8}>
+                <Text
+                  fontSize="36px"
+                  fontWeight="bold"
+                  className="londrina-solid"
+                >
+                  <Box display="inline" color={themeVariables.accent}>
+                    {label}
+                  </Box>
+                  <Box as="span" color={themeVariables.light}>
+                    .{listedName}
+                  </Box>
+                </Text>
+              </Box>
+              
               <Text
                 textAlign="center"
                 color={themeVariables.light}
                 fontSize={30}
-                mt={2}
-                mb={4}
+                mb={6}
                 className="londrina-solid nounification-complete"
               >
                 Nounification complete!
               </Text>
-              <Box display="flex" justifyContent="center" mb={1}>
-                <Box
-                  as="img"
-                  //@ts-ignore
-                  src={defaultAvatarUri}
-                  alt="Avatar"
+              
+              <Box 
+                display="flex" 
+                justifyContent="center" 
+                mb={6} 
+                width="100%"
+                position="relative"
+              >
+                <Image
+                  src={defaultAvatarUri || "/favicon.svg"}
+                  alt="Nouns Avatar"
                   borderRadius="40px"
                   border="2px solid"
                   borderColor={themeVariables.accent}
-                  boxSize="120px"
+                  width="120px"
+                  height="120px"
                   className="success-avatar"
                 />
               </Box>
+              
+              {/* Buttons section */}
+              <Box width="100%" display="flex" flexDirection="column" gap={4} mt={2}>
+                <Button
+                  onClick={() => handlePrimaryName()}
+                  bg="#069420"
+                  _hover={{ bg: "#04891c" }}
+                  _active={{ bg: "#037d18" }}
+                  color={themeVariables.light}
+                  height="45px"
+                  fontSize="18px"
+                  disabled={primaryNameIndicators.waiting}
+                  className="londrina-solid"
+                >
+                  <Box as="span" mr={2} display="inline-block">👓</Box>
+                  {primaryNameIndicators.btnLabel}
+                </Button>
+                
+                <Button
+                  onClick={() => {
+                    setLabel("");
+                    setRegistrationStep(RegistrationStep.START);
+                  }}
+                  bg="#333333"
+                  _hover={{ bg: "#444444" }}
+                  color={themeVariables.light}
+                  height="45px"
+                  fontSize="18px"
+                  disabled={primaryNameIndicators.waiting}
+                  className="londrina-solid"
+                >
+                  Back to home
+                </Button>
+              </Box>
+              
+              {/* ENS domain link */}
               <Link
                 href={`https://app.ens.domains/${label}.${listedName}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                mb={2}
+                mt={4}
+                fontSize="14px"
                 textDecoration="none"
+                color={themeVariables.accent}
                 _hover={{
                   textDecoration: "underline",
-                  textDecorationColor: themeVariables.accent,
                 }}
               >
-                <Text color="white" fontSize={30} textAlign="center">
-                  <Box as="span" color={themeVariables.accent}>
-                    {label}
-                  </Box>
-                  .{listedName}
-                </Text>
+                View on ENS App →
               </Link>
-              <Button
-                onClick={() => handlePrimaryName()}
-                bg="#069420"
-                _hover={{ bg: "#04891c" }}
-                _active={{ bg: "#037d18" }}
-                color={themeVariables.light}
-                width="100%"
-                mb={3}
-                height="45px"
-                fontSize="18px"
-                disabled={primaryNameIndicators.waiting}
-                className="londrina-solid"
-              >
-                {primaryNameIndicators.btnLabel}
-              </Button>
-              <Button
-                onClick={() => {
-                  setLabel("");
-                  setRegistrationStep(RegistrationStep.START);
-                }}
-                bg={themeVariables.main}
-                _hover={{ bg: "#444" }}
-                color={themeVariables.light}
-                width="100%"
-                height="45px"
-                fontSize="18px"
-                disabled={primaryNameIndicators.waiting}
-                className="londrina-solid"
-              >
-                Back to home
-              </Button>
             </Grid>
           )}
           {registrationStep === RegistrationStep.COMPLETE && (
-            <Grid templateColumns="1fr" justifyItems="center">
+            <Grid templateColumns="1fr" justifyItems="center" width="100%">
+              {/* Main header with name centered */}
+              <Box textAlign="center" width="100%" mb={8}>
+                <Text
+                  fontSize="36px"
+                  fontWeight="bold"
+                  className="londrina-solid"
+                >
+                  <Box display="inline" color={themeVariables.accent}>
+                    {label}
+                  </Box>
+                  <Box as="span" color={themeVariables.light}>
+                    .{listedName}
+                  </Box>
+                </Text>
+              </Box>
+              
               <Text
                 textAlign="center"
                 color={themeVariables.light}
                 fontSize={30}
-                mt={2}
-                mb={4}
+                mb={6}
                 className="londrina-solid nounification-complete"
               >
                 Nounification complete!
               </Text>
-              <Box display="flex" justifyContent="center" mb={1}>
-                <Box
-                  as="img"
-                  //@ts-ignore
-                  src={defaultAvatarUri}
-                  alt="Avatar"
+              
+              <Box 
+                display="flex" 
+                justifyContent="center" 
+                mb={6} 
+                width="100%"
+                position="relative"
+              >
+                <Image
+                  src={defaultAvatarUri || "/favicon.svg"}
+                  alt="Nouns Avatar"
                   borderRadius="40px"
                   border="2px solid"
                   borderColor={themeVariables.accent}
-                  boxSize="120px"
+                  width="120px"
+                  height="120px"
                   className="success-avatar"
                 />
               </Box>
-              <Link
-                href={`https://app.ens.domains/${label}.${listedName}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                mb={2}
-                textDecoration="none"
-                _hover={{
-                  textDecoration: "underline",
-                  textDecorationColor: themeVariables.accent,
-                }}
-              >
-                <Text color="white" fontSize={30} textAlign="center">
-                  <Box as="span" color={themeVariables.accent}>
-                    {label}
-                  </Box>
-                  .{listedName}
-                </Text>
-              </Link>
+              
+              {/* Share on social */}
               <Link
                 href={`https://x.com/intent/tweet?text=I just minted ${label}.${listedName} via @namespace_eth!`}
                 target="_blank"
                 rel="noopener noreferrer"
-                mb={3}
+                mb={5}
                 textDecoration="none"
                 _hover={{
                   textDecoration: "underline",
                   textDecorationColor: themeVariables.accent,
                 }}
               >
-                <Text color="white" fontSize={24} textAlign="center">
+                <Text color="white" fontSize={18} textAlign="center">
+                  <Box as="span" mr={2} display="inline-block">🐦</Box>
                   Share on X
                 </Text>
               </Link>
-              <Box display="flex" flexDirection="column" width="100%" gap={3}>
+              
+              {/* Buttons section */}
+              <Box width="100%" display="flex" flexDirection="column" gap={4} mt={2}>
                 <Button
                   onClick={() => {
                     if (onSuccessfulMint) {
@@ -674,22 +699,22 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   _hover={{ bg: "#04891c" }}
                   _active={{ bg: "#037d18" }}
                   color={themeVariables.light}
-                  width="100%"
                   height="45px"
                   fontSize="18px"
                   className="londrina-solid"
                 >
+                  <Box as="span" mr={2} display="inline-block">📇</Box>
                   View my names
                 </Button>
+                
                 <Button
                   onClick={() => {
                     setLabel("");
                     setRegistrationStep(RegistrationStep.START);
                   }}
-                  bg={themeVariables.main}
-                  _hover={{ bg: "#444" }}
+                  bg="#333333"
+                  _hover={{ bg: "#444444" }}
                   color={themeVariables.light}
-                  width="100%"
                   height="45px"
                   fontSize="18px"
                   className="londrina-solid"
@@ -697,6 +722,22 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   Back to home
                 </Button>
               </Box>
+              
+              {/* ENS domain link */}
+              <Link
+                href={`https://app.ens.domains/${label}.${listedName}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                mt={4}
+                fontSize="14px"
+                textDecoration="none"
+                color={themeVariables.accent}
+                _hover={{
+                  textDecoration: "underline",
+                }}
+              >
+                View on ENS App →
+              </Link>
             </Grid>
           )}
         </Box>
