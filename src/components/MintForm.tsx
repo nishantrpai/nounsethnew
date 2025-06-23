@@ -314,7 +314,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
           flexWrap="nowrap"
           whiteSpace="nowrap"
         >
-          Strap on the <Image src={"/inline.svg"} height={10} mx={1} mt={1} />, and enter the Nouniverse
+          Strap on the <Image src={"/inline.svg"} height={6} mx={1} mt={1} />, and enter the Nouniverse
         </Box>
       </Box>
       <Box
