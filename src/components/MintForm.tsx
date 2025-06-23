@@ -600,7 +600,7 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                   color={themeVariables.light}
                   height="45px"
                   fontSize="18px"
-                  flexBasis="50%"
+                  flexBasis="60%"
                   disabled={primaryNameIndicators.waiting}
                   className="londrina-solid"
                 >
