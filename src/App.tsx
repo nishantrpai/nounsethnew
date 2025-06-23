@@ -26,6 +26,7 @@ function App() {
 
 const AppContainer = () => {
   const [view, setView] = useState("mint");
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const state = useAppConfig()
 
   if (state.isLoading) {
@@ -70,7 +71,12 @@ const AppContainer = () => {
         </Box>
       </Box>
       <Flex flex="1" width="100%" alignItems="center" justifyContent="center">
-        {view === "mint" ? <MintForm /> : <MySubnames setView={setView} />}
+        {view === "mint" ? 
+          <MintForm onSuccessfulMint={() => {
+            setRefreshTrigger(prev => prev + 1);
+            setView("mynames");
+          }} /> : 
+          <MySubnames setView={setView} refreshTrigger={refreshTrigger} />}
       </Flex>
       <Footer />
     </Flex>

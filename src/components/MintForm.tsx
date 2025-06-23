@@ -37,7 +37,11 @@ enum RegistrationStep {
 
 // No coin type constants needed
 
-export const MintForm = () => {
+interface MintFormProps {
+  onSuccessfulMint?: () => void;
+}
+
+export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
   const { isRenting, listedName, listingChainId, isTestnet, defaultAvatarUri } =
     useAppConfig();
 
@@ -162,6 +166,13 @@ export const MintForm = () => {
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
       // Auto-hide success animation after 7 seconds to give more time to enjoy the celebration
       setTimeout(() => setShowSuccess(false), 7000);
+      
+      // Notify parent component about successful mint after showing success briefly
+      setTimeout(() => {
+        if (onSuccessfulMint) {
+          onSuccessfulMint();
+        }
+      }, 5000);
     } catch (err: any) {
       console.error(err);
       if (err?.cause?.details?.includes("User denied transaction signatur")) {
@@ -631,22 +642,40 @@ export const MintForm = () => {
                   Share on X
                 </Text>
               </Link>
-              <Button
-                onClick={() => {
-                  setLabel("");
-                  setRegistrationStep(RegistrationStep.START);
-                }}
-                bg="#069420"
-                _hover={{ bg: "#04891c" }}
-                _active={{ bg: "#037d18" }}
-                color={themeVariables.light}
-                width="100%"
-                height="45px"
-                fontSize="18px"
-                className="londrina-solid"
-              >
-                Back to home
-              </Button>
+              <Box display="flex" flexDirection="column" width="100%" gap={3}>
+                <Button
+                  onClick={() => {
+                    if (onSuccessfulMint) {
+                      onSuccessfulMint();
+                    }
+                  }}
+                  bg="#069420"
+                  _hover={{ bg: "#04891c" }}
+                  _active={{ bg: "#037d18" }}
+                  color={themeVariables.light}
+                  width="100%"
+                  height="45px"
+                  fontSize="18px"
+                  className="londrina-solid"
+                >
+                  View my names
+                </Button>
+                <Button
+                  onClick={() => {
+                    setLabel("");
+                    setRegistrationStep(RegistrationStep.START);
+                  }}
+                  bg={themeVariables.main}
+                  _hover={{ bg: "#444" }}
+                  color={themeVariables.light}
+                  width="100%"
+                  height="45px"
+                  fontSize="18px"
+                  className="londrina-solid"
+                >
+                  Back to home
+                </Button>
+              </Box>
             </Grid>
           )}
         </Box>

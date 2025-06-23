@@ -34,9 +34,10 @@ const fetchSubnames = async (owner: string, parentName: string) => {
 
 interface MySubnamesProps {
   setView: (view: string) => void;
+  refreshTrigger?: number;
 }
 
-export const MySubnames = ({ setView }: MySubnamesProps) => {
+export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => {
   const { listedName } = useAppConfig();
   const { address } = useAccount();
   const [selectedSubname, setSelectedSubname] = useState<Subname>();
@@ -56,14 +57,20 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
       return;
     }
 
+    // Always set fetching to true when we're about to fetch
+    setSubnames(prev => ({ ...prev, fetching: true }));
+    
     fetchSubnames(address, listedName).then((res) => {
       setSubnames({
         fetching: false,
         items: res.items,
         totalItems: res.totalItems,
       });
+    }).catch(error => {
+      console.error("Error fetching subnames:", error);
+      setSubnames(prev => ({ ...prev, fetching: false }));
     });
-  }, [address]);
+  }, [address, refreshTrigger, listedName]);
 
   const refreshSubnames = async () => {
     fetchSubnames(address!!, listedName).then((res) => {

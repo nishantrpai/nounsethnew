@@ -49,7 +49,7 @@ export const TopNavigation = ({ setView }: TopNavigationProps) => {
       >
         <Grid templateColumns="auto auto" alignItems="center">
           <Link textDecoration="none" onClick={() => setView("mint")}>
-            <Image src={"/favicon.svg"} onClick={() => {
+            <Image src={"/inline.svg"} onClick={() => {
               setIsCopied(true);
               navigator.clipboard.writeText("⌐◨-◨");
               setTimeout(() => setIsCopied(false), 2000);
