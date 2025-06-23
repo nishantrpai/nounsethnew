@@ -209,7 +209,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
                       borderRadius="5px"
                     >
                       <Box as="span" display="flex" alignItems="center">
-                        <Image src="/favicon.svg" height="22px" mr={2} />
+                        <Image src="/inline.svg" height="22px" mr={2} />
                         Mint a name
                       </Box>
                     </Button>
