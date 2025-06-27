@@ -11,91 +11,41 @@ import {
 } from "@chakra-ui/react";
 import { themeVariables } from "@/styles/themeVariables";
 import { Subname } from "./Types";
-import axios from "axios";
 import { useAccount } from "wagmi";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { SideModal } from "./SideModal";
 import { SingleSubname } from "./SingleSubname";
 import { ToastContainer } from "react-toastify";
 import { useAppConfig } from "./AppConfigContext";
-
-const fetchSubnames = async (owner: string, parentName: string) => {
-  const { data } = await axios.get<{
-    items: Subname[];
-    totalItems: number;
-  }>(`https://indexer.namespace.ninja/api/v1/nodes`, {
-    params: {
-      owner,
-      parentName: parentName,
-    },
-  });
-  return data;
-};
+import { useSubnames } from "./useSubnames";
+import noImage from "../assets/no-avatar.png";
 
 interface MySubnamesProps {
   setView: (view: string) => void;
-  refreshTrigger?: number;
 }
 
-export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => {
-  const { listedName } = useAppConfig();
+export const MySubnames = ({ setView }: MySubnamesProps) => {
+  const { listedName, listingType } = useAppConfig();
   const { address } = useAccount();
   const [selectedSubname, setSelectedSubname] = useState<Subname>();
   const [searchFilter, setSearchFilter] = useState("");
-  const [subnames, setSubnames] = useState<{
-    fetching: boolean;
-    items: Subname[];
-    totalItems: number;
-  }>({
-    fetching: true,
-    items: [],
-    totalItems: 0,
+
+  const { isFetching, items, refetch } = useSubnames({
+    owner: address,
+    parentName: listedName,
+    subnameType: listingType,
   });
 
-  useEffect(() => {
-    if (!address) {
-      return;
-    }
-
-    // Always set fetching to true when we're about to fetch
-    setSubnames(prev => ({ ...prev, fetching: true }));
-    
-    fetchSubnames(address, listedName).then((res) => {
-      setSubnames({
-        fetching: false,
-        items: res.items,
-        totalItems: res.totalItems,
-      });
-    }).catch(error => {
-      console.error("Error fetching subnames:", error);
-      setSubnames(prev => ({ ...prev, fetching: false }));
-    });
-  }, [address, refreshTrigger, listedName]);
-
-  const refreshSubnames = async () => {
-    fetchSubnames(address!!, listedName).then((res) => {
-      setSubnames({
-        fetching: false,
-        items: res.items,
-        totalItems: res.totalItems,
-      });
-    });
-  };
-
-  let sbnms: Subname[] = [];
-  for (let i = 0; i < 10; i++) {
-    sbnms = [...sbnms, ...subnames.items];
-  }
-  const filterApplied = searchFilter.length > 0;
-
   const allSubnames = useMemo(() => {
-    return subnames.items.filter((i) => {
+    return items.filter((i) => {
       if (searchFilter.length === 0) {
         return true;
       }
       return i.name.includes(searchFilter.toLocaleLowerCase());
     });
-  }, [subnames, searchFilter]);
+  }, [items, searchFilter]);
+
+  const filterApplied = searchFilter.length > 0;
 
   const boxPadding = useBreakpointValue({ base: 4, md: 6 });
 
@@ -113,7 +63,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
       {selectedSubname !== undefined && (
         <SideModal open={true} onClose={() => setSelectedSubname(undefined)}>
           <SingleSubname
-            onUpdate={() => refreshSubnames()}
+            onUpdate={() => refetch()}
             subname={selectedSubname}
           />
         </SideModal>
@@ -135,8 +85,8 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
           fontWeight="700"
           className="londrina-solid"
         >
-          {subnames.totalItems > 0
-            ? `${subnames.totalItems} names minted`
+          {items.length > 0
+            ? `${items.length} names minted`
             : "No names minted"}
         </Text>
       </Box>
@@ -166,7 +116,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
         border="1px solid none"
         borderColor={themeVariables.accent}
       >
-        {subnames.fetching && (
+        {isFetching && (
           <Flex alignItems="center" justifyContent="center" height="100%">
             <Spinner
               color={themeVariables.accent}
@@ -177,7 +127,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
             />
           </Flex>
         )}
-        {!subnames.fetching && (
+        {!isFetching && (
           <>
             {allSubnames.length === 0 && (
               <>
@@ -258,7 +208,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
                     >
                       <Flex alignItems="center">
                         <Image
-                          src={subname.texts["avatar"]}
+                          src={subname.texts?.avatar || noImage}
                           width="35px"
                           height="35px"
                           borderRadius="full"
@@ -271,7 +221,7 @@ export const MySubnames = ({ setView, refreshTrigger = 0 }: MySubnamesProps) => 
                           mb={0}
                           color="black"
                         >
-                          {subname.name}.noun.eth
+                          {subname.name}
                         </Text>
                         {index === 0 && (
                           <Box

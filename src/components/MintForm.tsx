@@ -9,7 +9,6 @@ import {
   Text,
   Image,
   useBreakpointValue,
-  Checkbox,
 } from "@chakra-ui/react";
 import { useNamepsaceClient } from "./useNamespaceClient";
 import { normalize } from "viem/ens";
@@ -69,13 +68,11 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
     RegistrationStep.START
   );
   const [showSuccess, setShowSuccess] = useState(false);
-  const [debugMode, setDebugMode] = useState(false);
   
   // Check if we're in debug mode with URL parameter
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('debugSuccessScreen') === 'true') {
-      setDebugMode(true);
       setLabel('debug-name');
       setRegistrationStep(RegistrationStep.PRIMARY_NAME);
       setShowSuccess(true);

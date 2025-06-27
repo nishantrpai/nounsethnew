@@ -33,7 +33,7 @@ interface IAppConfigContext {
   listingType: "L1" | "L2";
   isError: boolean;
   isLoading: boolean;
-  defaultAvatarUri?: string
+  defaultAvatarUri?: string;
 }
 
 const defaultContext: IAppConfigContext = {
@@ -57,7 +57,9 @@ export const AppContextProvider = ({ children }: PropsWithChildren) => {
     const isTestnet = import.meta.env.VITE_APP_IS_TESTNET === "true" || false;
     const listedName = import.meta.env.VITE_APP_LISTED_NAME;
     const listingChainName = import.meta.env.VITE_APP_LISTING_CHAIN;
-    const defaultAvatar = import.meta.env.VITE_APP_DEFAULT_AVATAR || "https://cdn.namespace.ninja/namespace.png";
+    const defaultAvatar =
+      import.meta.env.VITE_APP_DEFAULT_AVATAR ||
+      "https://cdn.namespace.ninja/namespace.png";
 
     //@ts-ignore
     if (!listingChainName || !supportedChainIds[listingChainName]) {
@@ -82,6 +84,8 @@ export const AppContextProvider = ({ children }: PropsWithChildren) => {
 
     try {
       const { data } = await axios.get<EnsListing>(backendUri);
+      console.log(data, "DATA HERE!", backendUri)
+      
       listingType = data.type;
 
       if (data.l2Metadata) {

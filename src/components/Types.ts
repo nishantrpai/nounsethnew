@@ -1,3 +1,8 @@
+export interface EnsRecords {
+    texts: Record<string,string>
+    addresses: Record<string, string>
+}
+
 export interface Subname {
     expiry: number;
     label: string;
