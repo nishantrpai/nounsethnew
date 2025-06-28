@@ -7,7 +7,6 @@ import {
   Text,
   Image,
   Input,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import { themeVariables } from "@/styles/themeVariables";
 import { Subname } from "./Types";
@@ -47,8 +46,6 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
 
   const filterApplied = searchFilter.length > 0;
 
-  const boxPadding = useBreakpointValue({ base: 4, md: 6 });
-
   return (
     <Grid
       display="flex"
@@ -72,7 +69,7 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        mb={10}
+        mb={8}
         alignSelf="center"
         width="100%"
       >
@@ -90,40 +87,40 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
             : "No names minted"}
         </Text>
       </Box>
-      {allSubnames.length ? (
-        <Box width="100%" alignSelf="center">
-          <Flex justifyContent="space-between" alignItems="center" mb={4}>
-            <Input
-              value={searchFilter}
-              onChange={(e) => setSearchFilter(e.target.value)}
-              placeholder={"Search names"}
-              borderRadius="5px"
-              width={{ base: "60%", md: "50%" }}
-              borderColor="#ccc"
-            />
-          </Flex>
+
+      {/* Search Input - styled to be part of the page */}
+      {allSubnames.length > 0 && (
+        <Box width="100%" maxWidth="600px" mb={6}>
+          <Input
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+            placeholder="Search names"
+            bg="white"
+            borderRadius="12px"
+            border="2px solid #e2e8f0"
+            _hover={{ borderColor: "#cbd5e0" }}
+            _focus={{ borderColor: themeVariables.accent, boxShadow: "none" }}
+            height="48px"
+            fontSize="16px"
+            fontWeight="500"
+          />
         </Box>
-      ) : null}
+      )}
+
       <Box
         bg="white"
-        p={boxPadding}
-        alignSelf="center"
-        shadow="none"
-        height="300px"
+        borderRadius="16px"
         width="100%"
         maxWidth="600px"
-        position="relative"
-        border="1px solid none"
-        borderColor={themeVariables.accent}
+        overflow="hidden"
+        minHeight="300px"
       >
         {isFetching && (
-          <Flex alignItems="center" justifyContent="center" height="100%">
+          <Flex alignItems="center" justifyContent="center" height="300px">
             <Spinner
               color={themeVariables.accent}
-              width={200}
-              height={200}
-              animationDuration="1.3s"
-              borderWidth="3px"
+              width="60px"
+              height="60px"
             />
           </Flex>
         )}
@@ -133,33 +130,35 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
               <>
                 {!filterApplied && (
                   <Flex
-                    height="100%"
+                    height="300px"
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
+                    px={8}
                   >
                     <Text
                       color={themeVariables.dark}
                       fontSize={24}
                       mb={8}
+                      textAlign="center"
                       className="courier-prime"
                     >
                       You don't own any names.
-                    </Text>{" "}
+                    </Text>
                     <Button
                       onClick={() => setView("mint")}
-                      height="45px"
-                      width="auto"
-                      paddingX={5}
-                      color={themeVariables.light}
+                      height="48px"
+                      px={6}
+                      color="white"
                       bg="#069420"
-                      _hover={{ bg: "#009612" }}
+                      _hover={{ bg: "#04891c" }}
                       className="londrina-solid"
-                      fontSize="20px"
-                      borderRadius="5px"
+                      fontSize="18px"
+                      borderRadius="12px"
+                      fontWeight="bold"
                     >
                       <Box as="span" display="flex" alignItems="center">
-                        <Image src="/inline.svg" height="22px" mr={2} />
+                        <Image src="/inline.svg" height="20px" mr={2} />
                         Mint a name
                       </Box>
                     </Button>
@@ -167,72 +166,83 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                 )}
                 {filterApplied && (
                   <Flex
-                    height="100%"
+                    height="300px"
                     flexDirection="column"
                     alignItems="center"
                     justifyContent="center"
+                    px={8}
                   >
-                    <Text color={themeVariables.accent} fontSize={24} mb={10}>
-                      No subnames with search criteria
+                    <Text color="#666" fontSize={20} mb={6} textAlign="center">
+                      No names match your search
                     </Text>
                     <Button
                       onClick={() => setSearchFilter("")}
-                      width="50%"
-                      color={themeVariables.light}
+                      color="white"
                       bg={themeVariables.accent}
+                      _hover={{ bg: "#dd6b20" }}
+                      borderRadius="8px"
+                      px={6}
+                      height="40px"
                     >
-                      Clear
+                      Clear search
                     </Button>
                   </Flex>
                 )}
               </>
             )}
             {allSubnames.length > 0 && (
-              <>
+              <Box>
                 {allSubnames
                   .filter((i) => {
                     if (searchFilter.length === 0) {
                       return true;
                     }
-                    return i.name.includes(searchFilter.toLocaleLowerCase());
+                    return i.name.toLowerCase().includes(searchFilter.toLowerCase());
                   })
                   .map((subname, index) => (
                     <Flex
                       key={subname.name + "-" + index}
                       alignItems="center"
-                      p={3}
-                      borderBottom="1px solid #ccc"
-                      cursor="pointer"
+                      p={4}
+                      _hover={{ bg: "#f7fafc" }}
+                      transition="background-color 0.2s"
                       width="100%"
                       justifyContent="space-between"
                     >
-                      <Flex alignItems="center">
+                      <Flex alignItems="center" flex="1">
                         <Image
                           src={subname.texts?.avatar || noImage}
-                          width="35px"
-                          height="35px"
-                          borderRadius="full"
+                          width="40px"
+                          height="40px"
+                          borderRadius="8px"
                           backgroundColor="#f1f1f1"
                         />
                         <Text
                           fontSize="16px"
                           ml={4}
-                          fontWeight="500"
+                          fontWeight="600"
                           mb={0}
                           color="black"
+                          fontFamily="'Satoshi', sans-serif"
                         >
                           {subname.name}
                         </Text>
                         {index === 0 && (
                           <Box
-                            ml={2}
+                            ml={3}
                             px={2}
                             py={1}
                             bg="black"
                             color="white"
-                            fontSize="xs"
-                            borderRadius="2px"
+                            fontSize="12px"
+                            borderRadius="12px"
+                            fontWeight="600"
+                            fontFamily="'Satoshi', sans-serif"
+                            className="satoshi-font"
+                            display="flex"
+                            alignItems="center"
                           >
+                            <Image src="/inline.svg" height="12px" mr={1} />
                             Primary
                           </Box>
                         )}
@@ -240,32 +250,46 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                       <Button
                         onClick={() => setSelectedSubname(subname)}
                         size="sm"
-                        color="blue.500"
+                        color="#3182ce"
+                        bg="transparent"
+                        _hover={{ bg: "#ebf8ff", color: "#2c5aa0" }}
+                        fontWeight="600"
+                        fontSize="14px"
+                        px={3}
+                        height="32px"
+                        borderRadius="6px"
+                        className="satoshi-font"
+                        fontFamily="'Satoshi', sans-serif"
                       >
                         Manage name
                       </Button>
                     </Flex>
                   ))}
-              </>
+              </Box>
             )}
           </>
         )}
       </Box>
-      <Box
-        display={allSubnames.length > 0 ? "block" : "none"}
-        mt={5}
-        p={3}
-        bg="#f8a100"
-        borderRadius="5px"
-        fontSize="0.9em"
-        textAlign="left"
-        maxWidth="600px"
-        width="100%"
-      >
-        <Text mb={0}>
-          Manage name navs users to ens.app: https://app.ens.domains/{"{name}"}
-        </Text>
-      </Box>
+      
+      {/* Info box */}
+      {allSubnames.length > 0 && (
+        <Box
+          mt={6}
+          p={4}
+          bg="#fff3cd"
+          borderRadius="12px"
+          fontSize="14px"
+          textAlign="center"
+          maxWidth="600px"
+          width="100%"
+          border="1px solid #ffeaa7"
+        >
+          <Text mb={0} color="#856404" fontWeight="500">
+            Manage name navigates to ens.app: https://app.ens.domains/{"{name}"}
+          </Text>
+        </Box>
+      )}
+
       <ToastContainer
         toastStyle={{
           backgroundColor: themeVariables.accent,

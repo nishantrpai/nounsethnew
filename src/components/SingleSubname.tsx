@@ -305,88 +305,145 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
 
 
     return (
-      <Box mt={10}>
-      <Flex alignItems="center" flexDirection="column">
-        <Image src={subname.texts["avatar"]} width="150px" height="150px" borderRadius="full" outline="3px solid" outlineColor={themeVariables.accent} />
-        <Text mt={3} mb={0} fontSize="24px" color={themeVariables.accent}>
-          {subname.name}
-        </Text>
-      </Flex>
-      <Flex justifyContent="center" mt={4}>
-        <Text
-          fontSize="18px"
-          cursor="pointer"
-          color={currentNav === "addr" ? themeVariables.accent : "inherit"}
-          onClick={() => setCurrentNav("addr")}
-          mr={2}
-        >
-          Addresses
-        </Text>
-        <Text
-          fontSize="18px"
-          cursor="pointer"
-          color={currentNav === "text" ? themeVariables.accent : "inherit"}
-          onClick={() => setCurrentNav("text")}
-        >
-          Texts
-        </Text>
-      </Flex>
-      <Box mt={2}>
-        <Flex justifyContent="center">
-          <Button
-            onClick={handleUpdate}
-            disabled={!hasRecordUpdates || mintBtnLoading}
-            bg={themeVariables.accent}
-            color={themeVariables.light}
-            width="90%"
+      <Box p={6} maxWidth="600px" mx="auto">
+        {/* Header with avatar and name */}
+        <Flex alignItems="center" flexDirection="column" mb={8}>
+          <Image 
+            src={subname.texts["avatar"]} 
+            width="80px" 
+            height="80px" 
+            borderRadius="12px" 
+            backgroundColor="#f1f1f1"
+            mb={4}
+          />
+          <Text 
+            fontSize="28px" 
+            color={themeVariables.dark}
+            fontWeight="700"
+            textAlign="center"
+            className="londrina-solid"
+            mb={0}
           >
-            {mintBtnLabel}
+            {subname.name}
+          </Text>
+        </Flex>
+
+        {/* Navigation Tabs */}
+        <Flex justifyContent="center" mb={6}>
+          <Button
+            onClick={() => setCurrentNav("addr")}
+            bg={currentNav === "addr" ? "#069420" : "white"}
+            color={currentNav === "addr" ? "white" : "#666"}
+            _hover={{ bg: currentNav === "addr" ? "#04891c" : "#f7fafc" }}
+            border="2px solid #e2e8f0"
+            borderRadius="12px"
+            px={6}
+            py={3}
+            mr={3}
+            className="satoshi-font"
+            fontWeight="600"
+            fontSize="16px"
+            height="48px"
+          >
+            Addresses
+          </Button>
+          <Button
+            onClick={() => setCurrentNav("text")}
+            bg={currentNav === "text" ? "#069420" : "white"}
+            color={currentNav === "text" ? "white" : "#666"}
+            _hover={{ bg: currentNav === "text" ? "#04891c" : "#f7fafc" }}
+            border="2px solid #e2e8f0"
+            borderRadius="12px"
+            px={6}
+            py={3}
+            className="satoshi-font"
+            fontWeight="600"
+            fontSize="16px"
+            height="48px"
+          >
+            Text Records
           </Button>
         </Flex>
-      </Box>
-      <Box p={5} display="flex" flexDirection="column" alignItems="center">
+
+        {/* Content Area */}
+        <Box 
+          bg="white" 
+          borderRadius="16px" 
+          p={6}
+          mb={6}
+          minHeight="400px"
+        >
         {currentNav === "addr" && (
           <>
-            <Text textAlign="center" color={themeVariables.accent} mt={1} mb={1}>
-              Select record to edit
+            <Text 
+              textAlign="center" 
+              color="#666" 
+              fontSize="16px"
+              mb={6}
+              className="satoshi-font"
+              fontWeight="500"
+            >
+              Select a blockchain to set an address
             </Text>
-            <Flex flexWrap="wrap" justifyContent="center">
+            <Flex flexWrap="wrap" justifyContent="center" mb={6}>
               {Object.values(KnownAddresses).map((knownAddr) => (
-                <Flex
+                <Button
                   onClick={() => setSelectedCoin(knownAddr.coinType)}
                   key={knownAddr.coinType}
-                  outline="1px solid"
-                  outlineColor={themeVariables.accent}
-                  alignItems="center"
-                  justifyContent="center"
-                  color={themeVariables.accent}
-                  p={2}
-                  m={1}
-                  cursor="pointer"
-                  transition="all 0.3s linear"
-                  _hover={{ transform: "scale(1.1)", outlineColor: "white" }}
-                  _selected={{ transform: "scale(1.1)", outlineColor: "white" }}
+                  variant="outline"
+                  border="2px solid"
+                  borderColor={selectedCoin === knownAddr.coinType ? "#069420" : "#e2e8f0"}
+                  bg={selectedCoin === knownAddr.coinType ? "#f0fff4" : "white"}
+                  color={selectedCoin === knownAddr.coinType ? "#069420" : "#666"}
+                  _hover={{ 
+                    borderColor: "#069420", 
+                    bg: "#f0fff4",
+                    transform: "scale(1.02)" 
+                  }}
+                  borderRadius="12px"
+                  p={4}
+                  m={2}
+                  height="auto"
+                  minH="60px"
+                  flexDirection="column"
+                  className="satoshi-font"
+                  fontWeight="600"
+                  transition="all 0.2s ease"
                 >
-                  <Image src={knownAddr.icon} width="20px" height="20px" mr={2}/>
-                  <Text mb={0}>{knownAddr.name}</Text>
-                </Flex>
+                  <Image src={knownAddr.icon} width="24px" height="24px" mb={2}/>
+                  <Text mb={0} fontSize="14px">{knownAddr.name}</Text>
+                </Button>
               ))}
             </Flex>
-            <Box width="100%" mt={2}>
-              <Text mt={1} mb={1} color={themeVariables.accent}>
-                {addressMetadata.name} address
+            <Box width="100%">
+              <Text 
+                mb={3} 
+                color="#333"
+                fontSize="16px"
+                fontWeight="600"
+                className="satoshi-font"
+              >
+                {addressMetadata.name} Address
               </Text>
               <Input
-                placeholder={`Set ${addressMetadata.name} address...`}
+                placeholder={`Enter ${addressMetadata.name} address...`}
                 onChange={(e) => handleAddressChange(selectedCoin, e.target.value)}
-                mt={1}
                 value={addresseValues[selectedCoin] || ""}
-                bg={themeVariables.light}
-                color={themeVariables.dark}
+                bg="white"
+                color="#333"
+                border="2px solid #e2e8f0"
+                borderRadius="12px"
+                _hover={{ borderColor: "#cbd5e0" }}
+                _focus={{ borderColor: "#069420", boxShadow: "none" }}
+                _placeholder={{ color: "#999" }}
+                height="48px"
+                fontSize="16px"
+                className="satoshi-font"
+                fontWeight="500"
               />
               {!isValidAddress && (addresseValues[selectedCoin] || "").length > 0 && (
-                <Text mt={2} color={themeVariables.error} mb={0}>
-                  {addressMetadata.name} address is not valid
+                <Text mt={3} color="#e53e3e" mb={0} fontSize="14px" className="satoshi-font">
+                  Please enter a valid {addressMetadata.name} address
                 </Text>
               )}
             </Box>
@@ -394,75 +451,141 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
         )}
         {currentNav === "text" && (
           <>
-            <Text textAlign="center" color={themeVariables.accent} mt={1} mb={1}>
-              Select record to edit
+            <Text 
+              textAlign="center" 
+              color="#666" 
+              fontSize="16px"
+              mb={6}
+              className="satoshi-font"
+              fontWeight="500"
+            >
+              Select a text record to edit
             </Text>
-            <Flex flexWrap="wrap" justifyContent="center">
+            <Flex flexWrap="wrap" justifyContent="center" mb={6}>
               {Object.values(KnownTexts).map((txt) => (
-                <Flex
+                <Button
                   key={txt.key}
                   onClick={() => setSelectedText(txt.key)}
-                  outline="1px solid"
-                  outlineColor={themeVariables.accent}
-                  alignItems="center"
-                  justifyContent="center"
-                  color={themeVariables.accent}
-                  p={2}
-                  m={1}
-                  cursor="pointer"
-                  transition="all 0.3s linear"
-                  _hover={{ transform: "scale(1.1)", outlineColor: "white" }}
-                  _selected={{ transform: "scale(1.1)", outlineColor: "white" }}
-                >
-                  {txt.type === "profile" ? (
-                    <CgProfile color={themeVariables.accent} className="me-2" />
+                  variant="outline"
+                  border={selectedText === txt.key ? "none" : "2px solid #e2e8f0"}
+                  bg={selectedText === txt.key ? "#069420" : "white"}
+                  color={selectedText === txt.key ? "white" : "#666"}
+                  _hover={{ 
+                    borderColor: selectedText === txt.key ? "none" : "#069420", 
+                    bg: selectedText === txt.key ? "#04891c" : "#f0fff4",
+                    transform: "scale(1.02)" 
+                  }}
+                  borderRadius="12px"
+                  p={4}
+                  m={2}
+                  height="auto"
+                  minH="60px"
+                  flexDirection="column"
+                  className="satoshi-font"
+                  fontWeight="600"
+                  transition="all 0.2s ease"                  >
+                  {txt.icon ? (
+                    <Image src={txt.icon} width="20px" height="20px" mb={2} />
+                  ) : txt.type === "profile" ? (
+                    <CgProfile size={20} style={{ marginBottom: "8px" }} />
                   ) : (
-                    <IoShareSocialSharp color={themeVariables.accent} className="me-2" />
+                    <IoShareSocialSharp size={20} style={{ marginBottom: "8px" }} />
                   )}
-                  <Text mb={0}>{txt.label}</Text>
-                </Flex>
+                  <Text mb={0} fontSize="14px">{txt.label}</Text>
+                </Button>
               ))}
               {Object.keys(textValues)
                 .filter((txt) => !KnownTexts[txt] && txt !== "avatar")
                 .map((txt) => (
-                  <Flex
+                  <Button
                     key={txt + "-custom"}
                     onClick={() => setSelectedText(txt)}
-                    outline="1px solid"
-                    outlineColor={themeVariables.accent}
-                    alignItems="center"
-                    color={themeVariables.accent}
-                    p={2}
-                    m={1}
-                    cursor="pointer"
-                    transition="all 0.3s linear"
-                    _hover={{ transform: "scale(1.1)", outlineColor: "white" }}
-                    _selected={{ transform: "scale(1.1)", outlineColor: "white" }}
+                    variant="outline"
+                    border={selectedText === txt ? "none" : "2px solid #e2e8f0"}
+                    bg={selectedText === txt ? "#069420" : "white"}
+                    color={selectedText === txt ? "white" : "#666"}
+                    _hover={{ 
+                      borderColor: selectedText === txt ? "none" : "#069420", 
+                      bg: selectedText === txt ? "#04891c" : "#f0fff4",
+                      transform: "scale(1.02)" 
+                    }}
+                    borderRadius="12px"
+                    p={4}
+                    m={2}
+                    height="auto"
+                    minH="60px"
+                    flexDirection="column"
+                    className="satoshi-font"
+                    fontWeight="600"
+                    transition="all 0.2s ease"
                   >
-                    <CgProfile color="#2c124f" className="me-2" />
-                    <Text>{txt}</Text>
-                  </Flex>
+                    <CgProfile size={20} style={{ marginBottom: "8px" }} />
+                    <Text mb={0} fontSize="14px">{txt}</Text>
+                  </Button>
                 ))}
             </Flex>
             {selectedText && (
               <Box width="100%">
-                <Text mb={1} color={themeVariables.accent}>
-                  {textMetadata.label} record
+                <Text 
+                  mb={3} 
+                  color="#333"
+                  fontSize="16px"
+                  fontWeight="600"
+                  className="satoshi-font"
+                >
+                  {textMetadata.label} Record
                 </Text>
                 <Input
                   value={textValues[selectedText] || ""}
                   onChange={(e) => handleTextChange(selectedText, e.target.value)}
-                  bg={themeVariables.light}
-                  color={themeVariables.dark}
+                  bg="white"
+                  color="#333"
+                  border="2px solid #e2e8f0"
+                  borderRadius="12px"
+                  _hover={{ borderColor: "#cbd5e0" }}
+                  _focus={{ borderColor: "#069420", boxShadow: "none" }}
+                  _placeholder={{ color: "#999" }}
+                  height="48px"
+                  fontSize="16px"
+                  className="satoshi-font"
+                  fontWeight="500"
                   placeholder={textMetadata.placeholder}
-                  borderRadius="5px"
                 />
               </Box>
             )}
           </>
         )}
       </Box>
-      <ToastContainer toastStyle={{ backgroundColor: themeVariables.accent, color: themeVariables.light}} hideProgressBar/>
-    </Box>
+
+        {/* Update Button */}
+        <Box>
+          <Button
+            onClick={handleUpdate}
+            disabled={!hasRecordUpdates || mintBtnLoading}
+            bg={hasRecordUpdates && !mintBtnLoading ? "#069420" : "#cbd5e0"}
+            color="white"
+            _hover={{ bg: hasRecordUpdates && !mintBtnLoading ? "#04891c" : "#cbd5e0" }}
+            _disabled={{ bg: "#cbd5e0", color: "#a0aec0", cursor: "not-allowed" }}
+            width="100%"
+            height="56px"
+            borderRadius="16px"
+            className="londrina-solid"
+            fontSize="20px"
+            fontWeight="bold"
+          >
+            {mintBtnLabel}
+          </Button>
+        </Box>
+
+        <ToastContainer 
+          toastStyle={{ 
+            backgroundColor: themeVariables.accent, 
+            color: themeVariables.light,
+            borderRadius: "12px",
+            fontFamily: "'Satoshi', sans-serif"
+          }} 
+          hideProgressBar
+        />
+      </Box>
     );
 }
