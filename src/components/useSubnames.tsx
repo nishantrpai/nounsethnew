@@ -33,9 +33,13 @@ const fetchL1Subnames = async (owner: Address, parentName: string) => {
       return [];
     }
 
+    console.log("Fetched subnames:", subnamesFetched, owner);
+
     const filteredSubnames = subnamesFetched.filter(
-      (subname: any) => subname.wrappedOwner?.id?.toLowerCase() === owner.toLowerCase()
+      (subname: any) => subname.wrappedOwner?.toLowerCase() === owner.toLowerCase()
     );
+
+    console.log("Filtered subnames:", filteredSubnames);
 
     const subnamesWithRecords = [];
 
