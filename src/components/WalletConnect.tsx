@@ -16,8 +16,8 @@ const myTheme = merge(lightTheme(), {
     profileAction: themeVariables.accent,
     modalBackground: themeVariables.main,
     modalBorder: themeVariables.accent,
-    modalText: themeVariables.light,
-    modalTextSecondary: themeVariables.accent,
+    modalText: '#000',
+    modalTextSecondary: themeVariables.main,
   },
 } as Theme);
 
