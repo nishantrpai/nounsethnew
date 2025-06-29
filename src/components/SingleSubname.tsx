@@ -2,16 +2,12 @@ import { Box, Button, Flex, Text, Image, Input } from "@chakra-ui/react";
 import { Subname } from "./Types";
 import { useAccount, usePublicClient, useSwitchChain, useWalletClient } from "wagmi";
 import { useEffect, useMemo, useState } from "react";
-import { Address, encodeFunctionData, Hash, hexToBytes, isAddress, namehash, parseAbi, toHex, zeroAddress } from "viem";
-import { getCoderByCoinType } from "@ensdomains/address-encoder";
-import { KnownAddresses, WalletAddress } from "./records/Addresses";
+import { Address, encodeFunctionData, Hash, namehash, parseAbi, zeroAddress } from "viem";
 import { KnownText, KnownTexts } from "./records/TextRecords";
-import { validate as isValidBtcAddress } from "bitcoin-address-validation";
 import { toast, ToastContainer } from "react-toastify";
 import { themeVariables } from "@/styles/themeVariables";
 import { CgProfile } from "react-icons/cg";
 import { IoShareSocialSharp } from "react-icons/io5";
-import chainIcon from "../assets/chains/circle.svg";
 import { mainnet, sepolia } from "viem/chains";
 import { getL2NamespaceContracts, getEnsContracts } from "@namespacesdk/addresses"
 import { useAppConfig } from "./AppConfigContext";
@@ -33,11 +29,7 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
     const { switchChain } = useSwitchChain();
     const { chain, address } = useAccount();
   
-    const [selectedCoin, setSelectedCoin] = useState(60);
     const [selectedText, setSelectedText] = useState("name");
-    const [addresseValues, setAddressValues] = useState<Record<number, string>>(
-      {}
-    );
   
     const [btnState, setBtnState] = useState<{
       waitingWallet: boolean
@@ -48,41 +40,18 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
     })
   
     const [textValues, setTextValues] = useState<Record<string, string>>({});
-    const [currentNav, setCurrentNav] = useState<"text" | "addr">("addr");
   
   
   
     useEffect(() => {
       const _texts: Record<string, string> = {};
-      const _addresses: Record<number, string> = {};
   
-      Object.keys(subname.addresses || {}).forEach((coinType) => {
-        const _coin = parseInt(coinType);
-        const coder = getCoderByCoinType(_coin);
-        if (coder) {
-          _addresses[parseInt(coinType)] = coder.encode(
-            hexToBytes(subname.addresses[coinType] as any)
-          );
-        }
-      });
       Object.keys(subname.texts || {}).forEach((textKey) => {
         _texts[textKey] = subname.texts[textKey];
       });
   
-      setAddressValues(_addresses);
       setTextValues(_texts);
     }, [subname]);
-  
-    const addressMetadata: WalletAddress = useMemo(() => {
-      return (
-        KnownAddresses[selectedCoin] || {
-          coinType: -1,
-          icon: chainIcon,
-          label: "unk",
-          name: "Unknown",
-        }
-      );
-    }, [selectedCoin]);
   
     const textMetadata: KnownText = useMemo(() => {
       const defaultt: KnownText = {
@@ -100,30 +69,6 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
       return KnownTexts[selectedText];
     }, [selectedText]);
   
-  
-    const _isValidAddress = (coin: number, value: string) => {
-      if (coin === 0) {
-        return isValidBtcAddress(value);
-      }
-  
-      return isAddress(value);
-    };
-  
-    const isValidAddress = useMemo(() => {
-      const currentValue = addresseValues[selectedCoin];
-      if (!currentValue || currentValue.length === 0) {
-        return false;
-      }
-  
-      return _isValidAddress(selectedCoin, currentValue);
-    }, [selectedCoin, addresseValues]);
-  
-    const handleAddressChange = (selectedCoin: number, value: string) => {
-      const _addrs = { ...addresseValues };
-      _addrs[selectedCoin] = value;
-      setAddressValues(_addrs);
-    };
-  
     const handleTextChange = (_selectedText: string, value: string) => {
       const _txts = { ...textValues };
       _txts[_selectedText] = value;
@@ -132,7 +77,6 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
   
     const getRecordsToUpdate = () => {
       const textsToChange: { key: string; value: string }[] = [];
-      const addrsToChange: { coin: number; value: string }[] = [];
   
       Object.keys(textValues).forEach((txt) => {
         let shouldUpdate = false;
@@ -151,53 +95,20 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
         }
       });
   
-      Object.keys(addresseValues).forEach((coinType) => {
-        const coin = parseInt(coinType);
-        let shouldUpdate = false;
-        const currentAddrValue = addresseValues[coin];
-        const existingAddresses = subname.addresses;
-        const addrCoder = getCoderByCoinType(coin);
-  
-        if (_isValidAddress(coin, currentAddrValue)) {
-          if (
-            existingAddresses[`${coinType}`] &&
-            existingAddresses[`${coinType}`].length > 0
-          ) {
-            if (addrCoder) {
-              const enodedValue = addrCoder.encode(
-                hexToBytes(subname.addresses[coinType] as any)
-              );
-  
-              if (
-                enodedValue.toLocaleLowerCase() !==
-                currentAddrValue.toLocaleLowerCase()
-              ) {
-                shouldUpdate = true;
-              }
-            }
-          } else {
-            shouldUpdate = true;
-          }
-  
-          if (shouldUpdate) {
-            addrsToChange.push({ coin, value: currentAddrValue });
-          }
-        }
-      });
-      return { texts: textsToChange, addrs: addrsToChange };
+      return { texts: textsToChange };
     };
   
     const hasRecordUpdates = useMemo(() => {
-      const { texts, addrs } = getRecordsToUpdate();
+      const { texts } = getRecordsToUpdate();
   
-      return texts.length > 0 || addrs.length > 0;
-    }, [textValues, addresseValues]);
+      return texts.length > 0;
+    }, [textValues]);
   
     const toResolverData = () => {
       const data: Hash[] = [];
   
       const nameNode = namehash(subname.name);
-      const { texts, addrs } = getRecordsToUpdate();
+      const { texts } = getRecordsToUpdate();
   
       console.log("Converting to resolver data", subname.name)
 
@@ -211,23 +122,6 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
         );
       });
   
-      addrs.forEach((addr) => {
-        const coder = getCoderByCoinType(addr.coin);
-        if (coder) {
-          let value = "0x";
-          if (addr.value.length > 0) {
-            const decodedAddr = coder.decode(addr.value);
-            value = toHex(decodedAddr);
-          }
-  
-          const encodedFunc = encodeFunctionData({
-            functionName: "setAddr",
-            abi: resolverAbi,
-            args: [nameNode, BigInt(addr.coin), value as any],
-          });
-          data.push(encodedFunc);
-        }
-      });
       return data;
     };
   
@@ -328,44 +222,17 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
           </Text>
         </Flex>
 
-        {/* Navigation Tabs */}
-        <Flex justifyContent="center" mb={6} flexDirection={{ base: "column", sm: "row" }} gap={{ base: 2, sm: 0 }}>
-          <Button
-            onClick={() => setCurrentNav("addr")}
-            bg={currentNav === "addr" ? "#069420" : "white"}
-            color={currentNav === "addr" ? "white" : "#666"}
-            _hover={{ bg: currentNav === "addr" ? "#04891c" : "#f7fafc" }}
-            border="2px solid #e2e8f0"
-            borderRadius="12px"
-            px={{ base: 4, md: 6 }}
-            py={3}
-            mr={{ base: 0, sm: 3 }}
-            className="satoshi-font"
-            fontWeight="600"
-            fontSize={{ base: "14px", md: "16px" }}
-            height={{ base: "44px", md: "48px" }}
-            width={{ base: "100%", sm: "auto" }}
-          >
-            Addresses
-          </Button>
-          <Button
-            onClick={() => setCurrentNav("text")}
-            bg={currentNav === "text" ? "#069420" : "white"}
-            color={currentNav === "text" ? "white" : "#666"}
-            _hover={{ bg: currentNav === "text" ? "#04891c" : "#f7fafc" }}
-            border="2px solid #e2e8f0"
-            borderRadius="12px"
-            px={{ base: 4, md: 6 }}
-            py={3}
-            className="satoshi-font"
-            fontWeight="600"
-            fontSize={{ base: "14px", md: "16px" }}
-            height={{ base: "44px", md: "48px" }}
-            width={{ base: "100%", sm: "auto" }}
-          >
-            Text Records
-          </Button>
-        </Flex>
+        {/* Header for Text Records */}
+        <Text 
+          textAlign="center" 
+          color="#333" 
+          fontSize={{ base: "18px", md: "20px" }}
+          mb={6}
+          className="satoshi-font"
+          fontWeight="600"
+        >
+          Text Records
+        </Text>
 
         {/* Content Area */}
         <Box 
@@ -375,31 +242,64 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
           mb={6}
           minHeight="400px"
         >
-        {currentNav === "addr" && (
-          <>
-            <Text 
-              textAlign="center" 
-              color="#666" 
-              fontSize={{ base: "14px", md: "16px" }}
-              mb={6}
-              className="satoshi-font"
-              fontWeight="500"
-            >
-              Select a blockchain to set an address
-            </Text>
-            <Flex flexWrap="wrap" justifyContent="flex-start" mb={6} gap={{ base: 1, md: 2 }}>
-              {Object.values(KnownAddresses).map((knownAddr) => (
+        {/* Text Records Content */}
+        <>
+          <Text 
+            textAlign="center" 
+            color="#666" 
+            fontSize="16px"
+            mb={6}
+            className="satoshi-font"
+            fontWeight="500"
+          >
+            Select a text record to edit
+          </Text>
+          <Flex flexWrap="wrap" justifyContent="center" mb={6}>
+            {Object.values(KnownTexts).map((txt) => (
+              <Button
+                key={txt.key}
+                onClick={() => setSelectedText(txt.key)}
+                variant="outline"
+                border={selectedText === txt.key ? "none" : "2px solid #e2e8f0"}
+                bg={selectedText === txt.key ? "#069420" : "white"}
+                color={selectedText === txt.key ? "white" : "#666"}
+                _hover={{ 
+                  borderColor: selectedText === txt.key ? "none" : "#069420", 
+                  bg: selectedText === txt.key ? "#04891c" : "#f0fff4",
+                  transform: "scale(1.02)" 
+                }}
+                borderRadius="12px"
+                p={4}
+                m={2}
+                height="auto"
+                minH="60px"
+                flexDirection="column"
+                className="satoshi-font"
+                fontWeight="600"
+                transition="all 0.2s ease"                  >
+                {txt.icon ? (
+                  <Image src={txt.icon} width="20px" height="20px" mb={2} />
+                ) : txt.type === "profile" ? (
+                  <CgProfile size={20} style={{ marginBottom: "8px" }} />
+                ) : (
+                  <IoShareSocialSharp size={20} style={{ marginBottom: "8px" }} />
+                )}
+                <Text mb={0} fontSize="14px">{txt.label}</Text>
+              </Button>
+            ))}
+            {Object.keys(textValues)
+              .filter((txt) => !KnownTexts[txt] && txt !== "avatar")
+              .map((txt) => (
                 <Button
-                  onClick={() => setSelectedCoin(knownAddr.coinType)}
-                  key={knownAddr.coinType}
+                  key={txt + "-custom"}
+                  onClick={() => setSelectedText(txt)}
                   variant="outline"
-                  border="2px solid"
-                  borderColor={selectedCoin === knownAddr.coinType ? "#069420" : "#e2e8f0"}
-                  bg={selectedCoin === knownAddr.coinType ? "#f0fff4" : "white"}
-                  color={selectedCoin === knownAddr.coinType ? "#069420" : "#666"}
+                  border={selectedText === txt ? "none" : "2px solid #e2e8f0"}
+                  bg={selectedText === txt ? "#069420" : "white"}
+                  color={selectedText === txt ? "white" : "#666"}
                   _hover={{ 
-                    borderColor: "#069420", 
-                    bg: "#f0fff4",
+                    borderColor: selectedText === txt ? "none" : "#069420", 
+                    bg: selectedText === txt ? "#04891c" : "#f0fff4",
                     transform: "scale(1.02)" 
                   }}
                   borderRadius="12px"
@@ -412,11 +312,12 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
                   fontWeight="600"
                   transition="all 0.2s ease"
                 >
-                  <Image src={knownAddr.icon} width="24px" height="24px" mb={2}/>
-                  <Text mb={0} fontSize="14px">{knownAddr.name}</Text>
+                  <CgProfile size={20} style={{ marginBottom: "8px" }} />
+                  <Text mb={0} fontSize="14px">{txt}</Text>
                 </Button>
               ))}
-            </Flex>
+          </Flex>
+          {selectedText && (
             <Box width="100%">
               <Text 
                 mb={3} 
@@ -425,12 +326,11 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
                 fontWeight="600"
                 className="satoshi-font"
               >
-                {addressMetadata.name} Address
+                {textMetadata.label} Record
               </Text>
               <Input
-                placeholder={`Enter ${addressMetadata.name} address...`}
-                onChange={(e) => handleAddressChange(selectedCoin, e.target.value)}
-                value={addresseValues[selectedCoin] || ""}
+                value={textValues[selectedText] || ""}
+                onChange={(e) => handleTextChange(selectedText, e.target.value)}
                 bg="white"
                 color="#333"
                 border="2px solid #e2e8f0"
@@ -442,121 +342,11 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
                 fontSize="16px"
                 className="satoshi-font"
                 fontWeight="500"
+                placeholder={textMetadata.placeholder}
               />
-              {!isValidAddress && (addresseValues[selectedCoin] || "").length > 0 && (
-                <Text mt={3} color="#e53e3e" mb={0} fontSize="14px" className="satoshi-font">
-                  Please enter a valid {addressMetadata.name} address
-                </Text>
-              )}
             </Box>
-          </>
-        )}
-        {currentNav === "text" && (
-          <>
-            <Text 
-              textAlign="center" 
-              color="#666" 
-              fontSize="16px"
-              mb={6}
-              className="satoshi-font"
-              fontWeight="500"
-            >
-              Select a text record to edit
-            </Text>
-            <Flex flexWrap="wrap" justifyContent="center" mb={6}>
-              {Object.values(KnownTexts).map((txt) => (
-                <Button
-                  key={txt.key}
-                  onClick={() => setSelectedText(txt.key)}
-                  variant="outline"
-                  border={selectedText === txt.key ? "none" : "2px solid #e2e8f0"}
-                  bg={selectedText === txt.key ? "#069420" : "white"}
-                  color={selectedText === txt.key ? "white" : "#666"}
-                  _hover={{ 
-                    borderColor: selectedText === txt.key ? "none" : "#069420", 
-                    bg: selectedText === txt.key ? "#04891c" : "#f0fff4",
-                    transform: "scale(1.02)" 
-                  }}
-                  borderRadius="12px"
-                  p={4}
-                  m={2}
-                  height="auto"
-                  minH="60px"
-                  flexDirection="column"
-                  className="satoshi-font"
-                  fontWeight="600"
-                  transition="all 0.2s ease"                  >
-                  {txt.icon ? (
-                    <Image src={txt.icon} width="20px" height="20px" mb={2} />
-                  ) : txt.type === "profile" ? (
-                    <CgProfile size={20} style={{ marginBottom: "8px" }} />
-                  ) : (
-                    <IoShareSocialSharp size={20} style={{ marginBottom: "8px" }} />
-                  )}
-                  <Text mb={0} fontSize="14px">{txt.label}</Text>
-                </Button>
-              ))}
-              {Object.keys(textValues)
-                .filter((txt) => !KnownTexts[txt] && txt !== "avatar")
-                .map((txt) => (
-                  <Button
-                    key={txt + "-custom"}
-                    onClick={() => setSelectedText(txt)}
-                    variant="outline"
-                    border={selectedText === txt ? "none" : "2px solid #e2e8f0"}
-                    bg={selectedText === txt ? "#069420" : "white"}
-                    color={selectedText === txt ? "white" : "#666"}
-                    _hover={{ 
-                      borderColor: selectedText === txt ? "none" : "#069420", 
-                      bg: selectedText === txt ? "#04891c" : "#f0fff4",
-                      transform: "scale(1.02)" 
-                    }}
-                    borderRadius="12px"
-                    p={4}
-                    m={2}
-                    height="auto"
-                    minH="60px"
-                    flexDirection="column"
-                    className="satoshi-font"
-                    fontWeight="600"
-                    transition="all 0.2s ease"
-                  >
-                    <CgProfile size={20} style={{ marginBottom: "8px" }} />
-                    <Text mb={0} fontSize="14px">{txt}</Text>
-                  </Button>
-                ))}
-            </Flex>
-            {selectedText && (
-              <Box width="100%">
-                <Text 
-                  mb={3} 
-                  color="#333"
-                  fontSize="16px"
-                  fontWeight="600"
-                  className="satoshi-font"
-                >
-                  {textMetadata.label} Record
-                </Text>
-                <Input
-                  value={textValues[selectedText] || ""}
-                  onChange={(e) => handleTextChange(selectedText, e.target.value)}
-                  bg="white"
-                  color="#333"
-                  border="2px solid #e2e8f0"
-                  borderRadius="12px"
-                  _hover={{ borderColor: "#cbd5e0" }}
-                  _focus={{ borderColor: "#069420", boxShadow: "none" }}
-                  _placeholder={{ color: "#999" }}
-                  height="48px"
-                  fontSize="16px"
-                  className="satoshi-font"
-                  fontWeight="500"
-                  placeholder={textMetadata.placeholder}
-                />
-              </Box>
-            )}
-          </>
-        )}
+          )}
+        </>
       </Box>
 
         {/* Update Button */}

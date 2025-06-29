@@ -270,29 +270,23 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                       <Button
                         onClick={() => setSelectedSubname(subname)}
                         size="sm"
-                        color="#3182ce"
-                        bg="#ebf8ff"
-                        _hover={{ bg: "#ebf8ff", color: "#2c5aa0" }}
+                        color="#666"
+                        bg="#f5f5f5"
+                        _hover={{ bg: "#e2e8f0", color: "#333" }}
                         fontWeight="600"
-                        fontSize={{ base: "12px", md: "14px" }}
-                        px={{ base: 2, md: 3 }}
+                        px={2}
                         height={{ base: "28px", md: "32px" }}
                         borderRadius="6px"
-                        className="satoshi-font"
-                        fontFamily="'Satoshi', sans-serif"
                         display="flex"
                         alignItems="center"
-                        minWidth={{ base: "auto", sm: "auto" }}
-                        gap={{ base: 1, sm: 2 }}
+                        justifyContent="center"
+                        minWidth={{ base: "28px", md: "32px" }}
                       >
                         <Image 
                           src="/settings.svg" 
                           height={{ base: "14px", md: "16px" }}
                           color="#3182ce"
                         />
-                        <Text display={{ base: "none", sm: "block" }} mb={0}>
-                          Manage name
-                        </Text>
                       </Button>
                     </Flex>
                   ))}
