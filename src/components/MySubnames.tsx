@@ -17,6 +17,7 @@ import { SingleSubname } from "./SingleSubname";
 import { ToastContainer } from "react-toastify";
 import { useAppConfig } from "./AppConfigContext";
 import { useSubnames } from "./useSubnames";
+import { usePrimarySubname } from "./usePrimarySubname";
 import noImage from "../assets/no-avatar.png";
 
 interface MySubnamesProps {
@@ -33,6 +34,11 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
     owner: address,
     parentName: listedName,
     subnameType: listingType,
+  });
+
+  const { isPrimary } = usePrimarySubname({
+    subnames: items,
+    ownerAddress: address,
   });
 
   const allSubnames = useMemo(() => {
@@ -239,7 +245,7 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                         >
                           {subname.name}
                         </Text>
-                        {index === 0 && (
+                        {isPrimary(subname.name) && (
                           <Box
                             ml={3}
                             mr={{ base: 0, sm: 2 }}
