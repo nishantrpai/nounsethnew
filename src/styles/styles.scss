@@ -13,17 +13,23 @@ Button {
 }
 
 // Wallet Connect Button Styling
-.ju367vn {
-    background: $accent !important;
-    color: $light !important;
-    border-color: $accent !important;
+.ju367va {
+    background: $light !important;
+    color: $main !important;
+    border-color: transparent !important;
     border-radius: 20px !important;
-    font-family: 'Londrina Solid', sans-serif !important;
+    // font-family: 'Londrina Solid', sans-serif !important;
 }
 
-.ju367vo {
+.ju367va {
     border-radius: 12px !important;
-    font-family: 'Londrina Solid', sans-serif !important;
+    border-color: transparent !important;
+    // font-family: 'Londrina Solid', sans-serif !important;
+}
+
+.ju367v89 {
+    background-color: transparent !important;
+    color: $main !important;
 }
 
 // Make all connect wallet buttons use Londrina font
