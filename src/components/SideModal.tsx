@@ -14,7 +14,12 @@ export const SideModal = (props: {
     }, []);
 
 
-    const modalWidth = useBreakpointValue({ base: "100%", md: "600px" });
+    const modalWidth = useBreakpointValue({ 
+      base: "100vw", 
+      sm: "90vw", 
+      md: "600px", 
+      lg: "600px" 
+    });
 
 
   
@@ -32,8 +37,8 @@ export const SideModal = (props: {
         right={props.open ? "0" : "-100%"}
         height="100vh"
         width={modalWidth}
-        boxShadow="12px 0 24px rgba(0, 0, 0, 0.5)"
-        borderLeft="1px solid #e0e0e0"
+        boxShadow={{ base: "none", md: "12px 0 24px rgba(0, 0, 0, 0.5)" }}
+        borderLeft={{ base: "none", md: "1px solid #e0e0e0" }}
         zIndex="1000"
         bg="white"
         color="#333"
@@ -44,16 +49,16 @@ export const SideModal = (props: {
         <Button
           onClick={() => props.onClose?.()}
           position="absolute"
-          top="20px"
-          right="20px"
-          width="32px"
-          height="32px"
-          minWidth="32px"
+          top={{ base: "16px", md: "20px" }}
+          right={{ base: "16px", md: "20px" }}
+          width={{ base: "28px", md: "32px" }}
+          height={{ base: "28px", md: "32px" }}
+          minWidth={{ base: "28px", md: "32px" }}
           color="#666"
           _hover={{ bg: "#e9ecef", color: "#333" }}
           _active={{ bg: "#dee2e6" }}
           borderRadius="8px"
-          fontSize="16px"
+          fontSize={{ base: "14px", md: "16px" }}
           fontWeight="500"
           zIndex="1001"
           display="flex"
@@ -64,7 +69,7 @@ export const SideModal = (props: {
         >
           ✕
         </Button>
-        <Box p="4" pt="60px">
+        <Box p={{ base: 2, md: 4 }} pt={{ base: "50px", md: "60px" }}>
           {props.children}
         </Box>
       </Box>,

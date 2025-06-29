@@ -52,10 +52,10 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
       flexDirection="column"
       alignItems="center"
       justifyContent="flex-start"
-      paddingTop="30px"
+      paddingTop={{ base: "20px", md: "30px" }}
       maxWidth="800px"
       mx="auto"
-      px={4}
+      px={{ base: 2, md: 4 }}
     >
       {selectedSubname !== undefined && (
         <SideModal open={true} onClose={() => setSelectedSubname(undefined)}>
@@ -77,7 +77,7 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
           mt={0}
           mb={0}
           color={themeVariables.dark}
-          fontSize="48px"
+          fontSize={{ base: "32px", md: "48px" }}
           textAlign="center"
           fontWeight="700"
           className="londrina-solid"
@@ -90,7 +90,7 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
 
       {/* Search Input - styled to be part of the page */}
       {allSubnames.length > 0 && (
-        <Box width="100%" maxWidth="600px" mb={6}>
+        <Box width="100%" maxWidth="600px" mb={6} px={{ base: 2, md: 0 }}>
           <Input
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
@@ -100,8 +100,8 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
             border="2px solid #e2e8f0"
             _hover={{ borderColor: "#cbd5e0" }}
             _focus={{ borderColor: themeVariables.accent, boxShadow: "none" }}
-            height="48px"
-            fontSize="16px"
+            height={{ base: "44px", md: "48px" }}
+            fontSize={{ base: "14px", md: "16px" }}
             fontWeight="500"
           />
         </Box>
@@ -114,6 +114,7 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
         maxWidth="600px"
         overflow="hidden"
         minHeight="300px"
+        mx={{ base: 2, md: 0 }}
       >
         {isFetching && (
           <Flex alignItems="center" justifyContent="center" height="300px">
@@ -147,19 +148,25 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                     </Text>
                     <Button
                       onClick={() => setView("mint")}
-                      height="48px"
-                      px={6}
+                      height={{ base: "44px", md: "48px" }}
+                      px={{ base: 4, md: 6 }}
                       color="white"
                       bg="#069420"
                       _hover={{ bg: "#04891c" }}
                       className="londrina-solid"
-                      fontSize="18px"
+                      fontSize={{ base: "16px", md: "18px" }}
                       borderRadius="12px"
                       fontWeight="bold"
                     >
                       <Box as="span" display="flex" alignItems="center">
-                        <Image src="/inline.svg" height="20px" mr={2} />
-                        Mint a name
+                        <Image 
+                          src="/inline.svg" 
+                          height={{ base: "16px", md: "20px" }} 
+                          mr={{ base: 1, md: 2 }} 
+                        />
+                        <Text display={{ base: "none", sm: "block" }} mb={0}>
+                          Mint a name
+                        </Text>
                       </Box>
                     </Button>
                   </Flex>
@@ -203,23 +210,28 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                     <Flex
                       key={subname.name + "-" + index}
                       alignItems="center"
-                      p={4}
+                      p={{ base: 3, md: 4 }}
                       _hover={{ bg: "#f7fafc" }}
                       transition="background-color 0.2s"
                       width="100%"
                       justifyContent="space-between"
+                      gap={{ base: 1, sm: 0 }}
                     >
-                      <Flex alignItems="center" flex="1">
+                      <Flex 
+                        alignItems="center" 
+                        flex="1" 
+                        width={{ base: "100%", sm: "auto" }}
+                      >
                         <Image
                           src={subname.texts?.avatar || noImage}
-                          width="40px"
-                          height="40px"
+                          width={{ base: "32px", md: "40px" }}
+                          height={{ base: "32px", md: "40px" }}
                           borderRadius="8px"
                           backgroundColor="#f1f1f1"
                         />
                         <Text
-                          fontSize="16px"
-                          ml={4}
+                          fontSize={{ base: "14px", md: "16px" }}
+                          ml={{ base: 3, md: 4 }}
                           fontWeight="600"
                           mb={0}
                           color="black"
@@ -230,11 +242,12 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                         {index === 0 && (
                           <Box
                             ml={3}
+                            mr={{ base: 0, sm: 2 }}
                             px={2}
                             py={1}
                             bg="black"
                             color="white"
-                            fontSize="12px"
+                            fontSize={{ base: "10px", md: "12px" }}
                             borderRadius="12px"
                             fontWeight="600"
                             fontFamily="'Satoshi', sans-serif"
@@ -242,8 +255,15 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                             display="flex"
                             alignItems="center"
                           >
-                            <Image src="/inline.svg" height="12px" mr={1} />
-                            Primary
+                            <Image 
+                              src="/inline.svg" 
+                              height={{ base: "10px", md: "12px" }} 
+                              mr={1} 
+                              display={{ base: "block", sm: "block" }}
+                            />
+                            <Text display={{ base: "none", sm: "block" }} mb={0}>
+                              Primary
+                            </Text>
                           </Box>
                         )}
                       </Flex>
@@ -251,17 +271,28 @@ export const MySubnames = ({ setView }: MySubnamesProps) => {
                         onClick={() => setSelectedSubname(subname)}
                         size="sm"
                         color="#3182ce"
-                        bg="transparent"
+                        bg="#ebf8ff"
                         _hover={{ bg: "#ebf8ff", color: "#2c5aa0" }}
                         fontWeight="600"
-                        fontSize="14px"
-                        px={3}
-                        height="32px"
+                        fontSize={{ base: "12px", md: "14px" }}
+                        px={{ base: 2, md: 3 }}
+                        height={{ base: "28px", md: "32px" }}
                         borderRadius="6px"
                         className="satoshi-font"
                         fontFamily="'Satoshi', sans-serif"
+                        display="flex"
+                        alignItems="center"
+                        minWidth={{ base: "auto", sm: "auto" }}
+                        gap={{ base: 1, sm: 2 }}
                       >
-                        Manage name
+                        <Image 
+                          src="/settings.svg" 
+                          height={{ base: "14px", md: "16px" }}
+                          color="#3182ce"
+                        />
+                        <Text display={{ base: "none", sm: "block" }} mb={0}>
+                          Manage name
+                        </Text>
                       </Button>
                     </Flex>
                   ))}

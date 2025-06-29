@@ -305,19 +305,19 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
 
 
     return (
-      <Box p={6} maxWidth="600px" mx="auto">
+      <Box p={{ base: 4, md: 6 }} maxWidth="600px" mx="auto">
         {/* Header with avatar and name */}
-        <Flex alignItems="center" flexDirection="column" mb={8}>
+        <Flex alignItems="center" flexDirection="column" mb={{ base: 6, md: 8 }}>
           <Image 
             src={subname.texts["avatar"]} 
-            width="80px" 
-            height="80px" 
+            width={{ base: "60px", md: "80px" }}
+            height={{ base: "60px", md: "80px" }}
             borderRadius="12px" 
             backgroundColor="#f1f1f1"
             mb={4}
           />
           <Text 
-            fontSize="28px" 
+            fontSize={{ base: "24px", md: "28px" }}
             color={themeVariables.dark}
             fontWeight="700"
             textAlign="center"
@@ -329,7 +329,7 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
         </Flex>
 
         {/* Navigation Tabs */}
-        <Flex justifyContent="center" mb={6}>
+        <Flex justifyContent="center" mb={6} flexDirection={{ base: "column", sm: "row" }} gap={{ base: 2, sm: 0 }}>
           <Button
             onClick={() => setCurrentNav("addr")}
             bg={currentNav === "addr" ? "#069420" : "white"}
@@ -337,13 +337,14 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
             _hover={{ bg: currentNav === "addr" ? "#04891c" : "#f7fafc" }}
             border="2px solid #e2e8f0"
             borderRadius="12px"
-            px={6}
+            px={{ base: 4, md: 6 }}
             py={3}
-            mr={3}
+            mr={{ base: 0, sm: 3 }}
             className="satoshi-font"
             fontWeight="600"
-            fontSize="16px"
-            height="48px"
+            fontSize={{ base: "14px", md: "16px" }}
+            height={{ base: "44px", md: "48px" }}
+            width={{ base: "100%", sm: "auto" }}
           >
             Addresses
           </Button>
@@ -354,12 +355,13 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
             _hover={{ bg: currentNav === "text" ? "#04891c" : "#f7fafc" }}
             border="2px solid #e2e8f0"
             borderRadius="12px"
-            px={6}
+            px={{ base: 4, md: 6 }}
             py={3}
             className="satoshi-font"
             fontWeight="600"
-            fontSize="16px"
-            height="48px"
+            fontSize={{ base: "14px", md: "16px" }}
+            height={{ base: "44px", md: "48px" }}
+            width={{ base: "100%", sm: "auto" }}
           >
             Text Records
           </Button>
@@ -369,7 +371,7 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
         <Box 
           bg="white" 
           borderRadius="16px" 
-          p={6}
+          p={{ base: 4, md: 6 }}
           mb={6}
           minHeight="400px"
         >
@@ -378,14 +380,14 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
             <Text 
               textAlign="center" 
               color="#666" 
-              fontSize="16px"
+              fontSize={{ base: "14px", md: "16px" }}
               mb={6}
               className="satoshi-font"
               fontWeight="500"
             >
               Select a blockchain to set an address
             </Text>
-            <Flex flexWrap="wrap" justifyContent="center" mb={6}>
+            <Flex flexWrap="wrap" justifyContent="center" mb={6} gap={{ base: 1, md: 2 }}>
               {Object.values(KnownAddresses).map((knownAddr) => (
                 <Button
                   onClick={() => setSelectedCoin(knownAddr.coinType)}
