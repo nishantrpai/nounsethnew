@@ -387,7 +387,7 @@ export const SingleSubname = ({subname, onUpdate}: {subname: Subname; onUpdate: 
             >
               Select a blockchain to set an address
             </Text>
-            <Flex flexWrap="wrap" justifyContent="center" mb={6} gap={{ base: 1, md: 2 }}>
+            <Flex flexWrap="wrap" justifyContent="flex-start" mb={6} gap={{ base: 1, md: 2 }}>
               {Object.values(KnownAddresses).map((knownAddr) => (
                 <Button
                   onClick={() => setSelectedCoin(knownAddr.coinType)}
