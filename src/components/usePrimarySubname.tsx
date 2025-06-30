@@ -32,7 +32,7 @@ export const usePrimarySubname = ({ subnames, ownerAddress }: UsePrimarySubnameP
         
         if (!clientToUse) {
           // Fall back to first subname if no client available
-          setPrimarySubname(subnames[0]?.name || null);
+          setPrimarySubname(null);
           return;
         }
 
