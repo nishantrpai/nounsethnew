@@ -45,6 +45,35 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
   const { isRenting, listedName, listingChainId, isTestnet, defaultAvatarUri } =
     useAppConfig();
 
+  // Helper function to get the correct Etherscan URL for transaction
+  const getEtherscanUrl = (txHash: string) => {
+    switch (listingChainId) {
+      case mainnet.id:
+        return `https://etherscan.io/tx/${txHash}`;
+      case sepolia.id:
+        return `https://sepolia.etherscan.io/tx/${txHash}`;
+      case 8453: // Base
+        return `https://basescan.org/tx/${txHash}`;
+      case 84532: // Base Sepolia
+        return `https://sepolia.basescan.org/tx/${txHash}`;
+      case 42161: // Arbitrum One
+        return `https://arbiscan.io/tx/${txHash}`;
+      case 421614: // Arbitrum Sepolia
+        return `https://sepolia.arbiscan.io/tx/${txHash}`;
+      case 10: // Optimism
+        return `https://optimistic.etherscan.io/tx/${txHash}`;
+      case 11155420: // Optimism Sepolia
+        return `https://sepolia-optimism.etherscan.io/tx/${txHash}`;
+      case 137: // Polygon
+        return `https://polygonscan.com/tx/${txHash}`;
+      case 80002: // Polygon Amoy (testnet)
+        return `https://amoy.polygonscan.com/tx/${txHash}`;
+      default:
+        // Default to mainnet etherscan for unknown chains
+        return `https://etherscan.io/tx/${txHash}`;
+    }
+  };
+
   const [label, setLabel] = useState("");
   const { address, chainId } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -531,9 +560,8 @@ export const MintForm = ({ onSuccessfulMint }: MintFormProps) => {
                 Registration in progress
               </Text>
               {txHash && (
-                // fix block explorer
                 <Link
-                  href={`${listedName}/tx/` + txHash}
+                  href={getEtherscanUrl(txHash)}
                   target="_blank"
                   rel="noopener noreferrer"
                   color={themeVariables.accent}
