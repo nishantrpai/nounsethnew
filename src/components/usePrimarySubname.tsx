@@ -46,7 +46,8 @@ export const usePrimarySubname = ({ subnames, ownerAddress }: UsePrimarySubnameP
         // Check if the primary name matches any of our subnames
         if (primaryName) {
           const matchingSubname = subnames.find(subname => 
-            subname.name.toLowerCase() === primaryName.toLowerCase()
+            // subname can be nishantpai.subname.eth we need to match it to nishantpai.eth (primary ens name)
+            subname.label.toLowerCase() === primaryName.toLowerCase().replace(/\.eth$/, "") // Remove .eth for comparison
           );
           
           if (matchingSubname) {
